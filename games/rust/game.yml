@@ -155,6 +155,7 @@ capabilities:
   configFiles: true
   resourceDiscovery: true
   steamDiskSpace: true
+  wipe: true
 
 # Default server settings
 defaults:
@@ -320,6 +321,154 @@ environment:
         label: "Auxiliary 02"
       - value: "aux03"
         label: "Auxiliary 03"
+
+# Maintenance features and actions
+# These define available maintenance operations that can be performed on the server
+features:
+  maintenance:
+    actions:
+      - id: wipe
+        enabled: true
+        ui:
+          label: "Wipe Server"
+          description: "Reset server data by deleting files. Astralis will stop the server, delete specified files, then restart. This action is destructive and cannot be undone."
+          category: "destructive"
+          icon: "trash"
+          color: "danger"
+        # Wipe behavior: Astralis stops server, deletes files under server/identity/**, then starts again
+        # NO command triggering - file deletion is handled by the daemon
+        form:
+          fields:
+            - key: wipeType
+              type: enum
+              label: "Wipe Type"
+              description: "Type of wipe to perform"
+              default: "map_wipe"
+              required: true
+              options:
+                - value: "map_wipe"
+                  label: "Map Wipe"
+                  description: "Delete map files and player data, keep server configs"
+                - value: "full_wipe"
+                  label: "Full Wipe"
+                  description: "Delete all files in the identity directory"
+            
+            - key: mapSource
+              type: enum
+              label: "Map Source"
+              description: "How to generate the new map after wipe"
+              default: "procedural"
+              required: true
+              options:
+                - value: "procedural"
+                  label: "Procedural Map"
+                  description: "Generate a new procedural map with seed and size"
+                - value: "custom_url"
+                  label: "Custom Map URL"
+                  description: "Download and use a custom map from URL"
+            
+            - key: seed
+              type: number
+              label: "Map Seed"
+              description: "Seed value for procedural map generation (leave empty for random). Only used when mapSource=procedural"
+              optional: true
+              min: 0
+              max: 2147483647
+              conditional:
+                field: "mapSource"
+                value: "procedural"
+            
+            - key: size
+              type: number
+              label: "Map Size"
+              description: "Size of the procedural map in meters. Only used when mapSource=procedural"
+              default: 3500
+              min: 1000
+              max: 6000
+              step: 100
+              conditional:
+                field: "mapSource"
+                value: "procedural"
+            
+            - key: customMapUrl
+              type: string
+              label: "Custom Map URL"
+              description: "Direct download URL for custom map file. Required when mapSource=custom_url"
+              optional: true
+              rules: "nullable|url"
+              conditional:
+                field: "mapSource"
+                value: "custom_url"
+            
+            - key: extraDeletePatterns
+              type: array
+              label: "Extra Delete Patterns"
+              description: "Additional file patterns to delete (relative to identity root). Patterns are validated to prevent path traversal. Use glob patterns like 'logs/*.log' or 'data/**/*.db'"
+              default: []
+              itemType: string
+              optional: true
+              validation:
+                - rule: "no_path_traversal"
+                  message: "Patterns must not contain '..' or absolute paths"
+            
+            - key: dryRun
+              type: boolean
+              label: "Dry Run"
+              description: "Preview what would be deleted without actually deleting files (useful for development/testing)"
+              default: false
+              optional: true
+        
+        # Wipe profiles define default delete patterns for each wipe type
+        # All patterns are relative to server/identity/** (identity root)
+        # Patterns support glob syntax (e.g., *.sav, logs/*, **/*.db)
+        # IMPORTANT: cfg/** directory is NEVER deleted in any wipe type
+        wipeProfiles:
+          map_wipe:
+            # Map wipe: Delete everything except cfg/**, player.tokens.db, and player.blueprints.db
+            delete:
+              # Delete all files and directories
+              - "**/*"
+            exclude:
+              # Never delete configuration files
+              - "cfg/**"
+              # Preserve player tokens database
+              - "player.tokens.db"
+              # Preserve player blueprints database
+              - "player.blueprints.db"
+          full_wipe:
+            # Full wipe: Delete everything except cfg/**
+            delete:
+              # Delete all files and directories
+              - "**/*"
+            exclude:
+              # Never delete configuration files
+              - "cfg/**"
+        
+        confirmation:
+          required: true
+          message: "Are you sure you want to wipe the server? This will stop the server, delete files, and restart. This action cannot be undone."
+          destructive: true
+      
+      - id: verify_files
+        enabled: true
+        ui:
+          label: "Verify Files"
+          description: "Verify server file integrity and repair corrupted files"
+          category: "maintenance"
+          icon: "check-circle"
+          color: "info"
+        form:
+          fields:
+            - key: validate
+              type: boolean
+              label: "Validate Files"
+              description: "Perform full validation of all game files"
+              default: true
+              required: true
+        command:
+          template: "server.verify {validate}"
+          parameters:
+            validate: "{validate}"
 
 # File paths (relative to server root)
 # {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime

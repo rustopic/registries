@@ -86,8 +86,8 @@ See [LICENSE](LICENSE) file for details.
 
 ## Support
 
-For issues, questions, or contributions related to this registry, please refer to the Astralis project documentation.
+For issues, questions, or contributions related to this registry, please refer to the Rustopic project documentation.
 
 ---
 
-*This registry is maintained as part of the Astralis game server management platform.*
+*This registry is maintained as part of the Rustopic game server management platform.*

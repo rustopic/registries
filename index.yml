@@ -8,4 +8,5 @@ games:
     version: "1.0.0"
     description: "Rust game server configuration"
     enabled: true
+  
 
