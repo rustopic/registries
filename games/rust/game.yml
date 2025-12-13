@@ -142,7 +142,7 @@ installation:
 # Variables are replaced at runtime: {{SERVER_PORT}}, {{QUERY_PORT}}, {{RCON_PORT}}, etc.
 startup:
   command: |
-    ./RustDedicated -batchmode +server.port {{SERVER_PORT}} +server.queryport {{QUERY_PORT}} +server.identity "rustopic" +rcon.port {{RCON_PORT}} +rcon.web true +server.hostname "{{HOSTNAME}}" +server.level "{{LEVEL}}" +server.description "{{DESCRIPTION}}" +server.url "{{SERVER_URL}}" +server.headerimage "{{SERVER_IMG}}" +server.logoimage "{{SERVER_LOGO}}" +server.maxplayers {{MAX_PLAYERS}} +rcon.password "{{RCON_PASS}}" +server.saveinterval {{SAVEINTERVAL}} +app.port {{APP_PORT}} $( [ -z ${MAP_URL} ] && printf %s "+server.worldsize \"{{WORLD_SIZE}}\" +server.seed \"{{WORLD_SEED}}\"" || printf %s "+server.levelurl {{MAP_URL}}" ) {{ADDITIONAL_ARGS}}
+    ./RustDedicated -batchmode +server.port {{SERVER_PORT}} +server.queryport {{QUERY_PORT}} +server.identity "{{SERVER_IDENTITY}}" +rcon.port {{RCON_PORT}} +rcon.web true +server.hostname "{{HOSTNAME}}" +server.level "{{LEVEL}}" +server.description "{{DESCRIPTION}}" +server.url "{{SERVER_URL}}" +server.headerimage "{{SERVER_IMG}}" +server.logoimage "{{SERVER_LOGO}}" +server.maxplayers {{MAX_PLAYERS}} +rcon.password "{{RCON_PASS}}" +server.saveinterval {{SAVEINTERVAL}} +app.port {{APP_PORT}} $( [ -z ${MAP_URL} ] && printf %s "+server.worldsize \"{{WORLD_SIZE}}\" +server.seed \"{{WORLD_SEED}}\"" || printf %s "+server.levelurl {{MAP_URL}}" ) {{ADDITIONAL_ARGS}}
   
   # Server startup detection
   done: "Server startup complete"
@@ -296,6 +296,13 @@ environment:
     fieldType: "text"
     userEditable: false
     
+  - name: SERVER_IDENTITY
+    description: "Unique server identity folder name. This determines where server data, configs, and saves are stored."
+    default: "rustopic"
+    required: true
+    rules: "required|string|regex:/^[a-zA-Z0-9_-]+$/|max:64"
+    fieldType: "text"
+    
   - name: BRANCH
     description: "Steam beta branch to use for server installation. Leave empty for stable release."
     default: ""
@@ -315,11 +322,12 @@ environment:
         label: "Auxiliary 03"
 
 # File paths (relative to server root)
+# {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
-  config: "server/rustopic/cfg/server.cfg"
-  identity: "server/rustopic"
-  logs: "server/rustopic/logs"
-  saves: "server/rustopic/saves"
+  config: "server/{IDENTITY}/cfg/server.cfg"
+  identity: "server/{IDENTITY}"
+  logs: "server/{IDENTITY}/logs"
+  saves: "server/{IDENTITY}/saves"
   steamcmd: "steamcmd"
   steamapps: "steamapps"
 

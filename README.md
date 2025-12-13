@@ -1,61 +1,93 @@
 # Astralis Game Registry
 
-This repository serves as a centralized registry for game server configurations, frameworks, and plugins consumed by the Astralis game server management daemon.
+A centralized registry repository for game server configurations, frameworks, and plugins used by the Astralis game server management daemon.
 
-## Purpose
+## Overview
 
-This registry is a **data-only** repository that provides:
-- Game server definitions and configurations
-- Framework definitions and compatibility information
-- Plugin metadata and configuration schemas
-- Adapter specifications for game-specific operations
+This registry serves as the single source of truth for game server definitions, framework configurations, and plugin metadata. The Astralis daemon automatically fetches and caches this registry from GitHub to provide comprehensive game server management capabilities.
 
-The Astralis daemon automatically fetches and caches this registry from GitHub to provide game server management capabilities.
+## What's Inside
 
-## Development Status
+This repository contains **data-only** configurations:
 
-⚠️ **This is a development registry repository.**
+- **Game Definitions**: Complete server configurations for supported games
+- **Framework Definitions**: Modding framework specifications (Oxide, Carbon, etc.)
+- **Plugin Definitions**: Plugin metadata and configuration schemas
+- **Adapter Specifications**: Game-specific operations and path mappings
 
-Currently, this registry contains configurations for development and testing purposes. The structure is designed to be production-ready and extensible for future game additions.
+## Current Status
 
-## How Astralis Consumes This Registry
+This is a **development registry** that's actively being expanded. Currently, we support:
 
-1. **Fetch**: The daemon fetches this repository from GitHub (via HTTPS or Git protocol)
-2. **Parse**: YAML files are parsed and validated against expected schemas
-3. **Cache**: Validated data is cached locally for performance
-4. **Serve**: Cached registry data is used to:
+- **Rust** - Full server configuration with Oxide and Carbon framework support
+
+More games will be added as the registry grows.
+
+## How It Works
+
+The Astralis daemon consumes this registry through the following process:
+
+1. **Fetch**: Automatically pulls the latest registry data from GitHub
+2. **Parse**: Validates and parses YAML configuration files
+3. **Cache**: Stores validated data locally for fast access
+4. **Serve**: Uses cached data to:
    - Generate server configuration options
    - Validate plugin configurations
    - Provide framework installation instructions
    - Map game-specific operations (reloads, resource discovery, etc.)
 
-The daemon **does not modify** registry files. All registry data is read-only from the daemon's perspective.
+All registry data is **read-only** from the daemon's perspective. The daemon never modifies registry files.
 
 ## Repository Structure
 
 ```
 astralis-registries/
 ├── README.md              # This file
+├── LICENSE                # License information
 ├── index.yml              # Game registry index
 ├── games/                 # Game definitions
 │   └── rust/             # Rust game configuration
 │       ├── game.yml      # Game metadata and capabilities
 │       ├── adapter.yml   # Game-specific adapter configuration
 │       ├── frameworks/   # Supported frameworks
+│       │   ├── oxide.yml # Oxide framework definition
+│       │   └── carbon.yml # Carbon framework definition
 │       └── plugins/      # Available plugins
+│           └── gather-manager/
+│               ├── plugin.yml
+│               └── schema.yml
 ```
 
-## Adding New Games
+## Contributing
 
-To add a new game to the registry:
+This registry is designed to be extensible. To add a new game:
 
 1. Create a new directory under `games/` with the game identifier
-2. Add `game.yml` and `adapter.yml` files
-3. Add framework definitions under `frameworks/`
-4. Add plugin definitions under `plugins/`
-5. Update `index.yml` to include the new game
+2. Add `game.yml` and `adapter.yml` files following the existing structure
+3. Add framework definitions under `frameworks/` if applicable
+4. Add plugin definitions under `plugins/` if available
+5. Update `index.yml` to include the new game entry
+
+## Configuration Variables
+
+Games in this registry use environment variables for configuration. Common variables include:
+
+- `SERVER_IDENTITY`: Unique server identity folder name
+- `HOSTNAME`: Server display name
+- `SERVER_PORT`: Game server port
+- `MAX_PLAYERS`: Maximum concurrent players
+- `BRANCH`: Steam beta branch (staging, aux01, aux02, aux03)
+
+Path placeholders like `{IDENTITY}` are replaced at runtime with the actual server identity value.
 
 ## License
 
-This registry is maintained for use with the Astralis daemon. Configuration schemas and metadata follow standard conventions for game server management.
+See [LICENSE](LICENSE) file for details.
 
+## Support
+
+For issues, questions, or contributions related to this registry, please refer to the Astralis project documentation.
+
+---
+
+*This registry is maintained as part of the Astralis game server management platform.*

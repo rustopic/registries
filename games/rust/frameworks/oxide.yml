@@ -24,7 +24,8 @@ installation:
   downloadUrl: "https://github.com/OxideMod/Oxide.Rust/releases/latest/download/Oxide.Rust.zip"
   
   # Installation path (relative to server root)
-  installPath: "server/rustopic/oxide"
+  # {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
+  installPath: "server/{IDENTITY}/oxide"
   
   # Files to extract/install
   files:
@@ -56,13 +57,14 @@ capabilities:
   hooks: true
 
 # Framework-specific paths
+# {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
-  root: "server/rustopic/oxide"
-  plugins: "server/rustopic/oxide/plugins"
-  config: "server/rustopic/oxide/config"
-  data: "server/rustopic/oxide/data"
-  lang: "server/rustopic/oxide/lang"
-  logs: "server/rustopic/oxide/logs"
+  root: "server/{IDENTITY}/oxide"
+  plugins: "server/{IDENTITY}/oxide/plugins"
+  config: "server/{IDENTITY}/oxide/config"
+  data: "server/{IDENTITY}/oxide/data"
+  lang: "server/{IDENTITY}/oxide/lang"
+  logs: "server/{IDENTITY}/oxide/logs"
 
 # Framework commands
 commands:

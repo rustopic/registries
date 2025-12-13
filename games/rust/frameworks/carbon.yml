@@ -25,7 +25,8 @@ installation:
   downloadUrl: "https://github.com/CarbonCommunity/Carbon.Core/releases/latest/download/Carbon.Rust.zip"
   
   # Installation path (relative to server root)
-  installPath: "server/rustopic/carbon"
+  # {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
+  installPath: "server/{IDENTITY}/carbon"
   
   # Files to extract/install
   files:
@@ -56,13 +57,14 @@ capabilities:
   performanceOptimized: true
 
 # Framework-specific paths
+# {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
-  root: "server/rustopic/carbon"
-  plugins: "server/rustopic/carbon/plugins"
-  config: "server/rustopic/carbon/config"
-  data: "server/rustopic/carbon/data"
-  lang: "server/rustopic/carbon/lang"
-  logs: "server/rustopic/carbon/logs"
+  root: "server/{IDENTITY}/carbon"
+  plugins: "server/{IDENTITY}/carbon/plugins"
+  config: "server/{IDENTITY}/carbon/config"
+  data: "server/{IDENTITY}/carbon/data"
+  lang: "server/{IDENTITY}/carbon/lang"
+  logs: "server/{IDENTITY}/carbon/logs"
 
 # Framework commands
 commands:

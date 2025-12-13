@@ -5,29 +5,30 @@ gameId: rust
 version: "1.0.0"
 
 # Path mappings for resource discovery
+# {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
   # Server configuration files
-  serverConfig: "server/rustopic/cfg/server.cfg"
+  serverConfig: "server/{IDENTITY}/cfg/server.cfg"
   
   # Identity-specific paths (identity folder name is runtime-provided)
-  identityRoot: "server/rustopic"
-  identityConfig: "server/rustopic/cfg/server.cfg"
-  identityLogs: "server/rustopic/logs"
-  identitySaves: "server/rustopic/saves"
+  identityRoot: "server/{IDENTITY}"
+  identityConfig: "server/{IDENTITY}/cfg/server.cfg"
+  identityLogs: "server/{IDENTITY}/logs"
+  identitySaves: "server/{IDENTITY}/saves"
   
   # Oxide framework paths
-  oxideRoot: "server/rustopic/oxide"
-  oxideConfig: "server/rustopic/oxide/config"
-  oxidePlugins: "server/rustopic/oxide/plugins"
-  oxideData: "server/rustopic/oxide/data"
-  oxideLang: "server/rustopic/oxide/lang"
+  oxideRoot: "server/{IDENTITY}/oxide"
+  oxideConfig: "server/{IDENTITY}/oxide/config"
+  oxidePlugins: "server/{IDENTITY}/oxide/plugins"
+  oxideData: "server/{IDENTITY}/oxide/data"
+  oxideLang: "server/{IDENTITY}/oxide/lang"
   
   # Carbon framework paths
-  carbonRoot: "server/rustopic/carbon"
-  carbonConfig: "server/rustopic/carbon/config"
-  carbonPlugins: "server/rustopic/carbon/plugins"
-  carbonData: "server/rustopic/carbon/data"
-  carbonLang: "server/rustopic/carbon/lang"
+  carbonRoot: "server/{IDENTITY}/carbon"
+  carbonConfig: "server/{IDENTITY}/carbon/config"
+  carbonPlugins: "server/{IDENTITY}/carbon/plugins"
+  carbonData: "server/{IDENTITY}/carbon/data"
+  carbonLang: "server/{IDENTITY}/carbon/lang"
 
 # Reload command templates
 reload:
