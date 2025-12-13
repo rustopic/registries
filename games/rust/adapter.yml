@@ -1,0 +1,106 @@
+# Rust Game Adapter Configuration
+# Defines Rust-specific operations and path mappings
+
+gameId: rust
+version: "1.0.0"
+
+# Path mappings for resource discovery
+paths:
+  # Server configuration files
+  serverConfig: "server/server.cfg"
+  
+  # Identity-specific paths (identity folder name is runtime-provided)
+  identityRoot: "server/{IDENTITY}"
+  identityConfig: "server/{IDENTITY}/server.cfg"
+  identityLogs: "server/{IDENTITY}/logs"
+  identitySaves: "server/{IDENTITY}/saves"
+  
+  # Oxide framework paths
+  oxideRoot: "server/{IDENTITY}/oxide"
+  oxideConfig: "server/{IDENTITY}/oxide/config"
+  oxidePlugins: "server/{IDENTITY}/oxide/plugins"
+  oxideData: "server/{IDENTITY}/oxide/data"
+  oxideLang: "server/{IDENTITY}/oxide/lang"
+
+# Reload command templates
+reload:
+  # Reload server configuration
+  config:
+    command: "server.writecfg"
+    description: "Reloads server.cfg configuration"
+    
+  # Reload all plugins
+  plugins:
+    command: "oxide.reload *"
+    description: "Reloads all Oxide plugins"
+    
+  # Reload specific plugin
+  plugin:
+    command: "oxide.reload {PLUGIN_NAME}"
+    description: "Reloads a specific Oxide plugin by name"
+    parameters:
+      - name: PLUGIN_NAME
+        description: "Name of the plugin to reload"
+        required: true
+
+# Resource discovery hints
+# These help the daemon locate and categorize server resources
+discovery:
+  # Configuration files
+  configs:
+    - pattern: "**/server.cfg"
+      type: "server_config"
+      editable: true
+    - pattern: "**/oxide/config/**/*.json"
+      type: "plugin_config"
+      editable: true
+      
+  # Plugin files
+  plugins:
+    - pattern: "**/oxide/plugins/*.cs"
+      type: "compiled_plugin"
+      editable: false
+    - pattern: "**/oxide/plugins/*.dll"
+      type: "compiled_plugin"
+      editable: false
+      
+  # Data files
+  data:
+    - pattern: "**/oxide/data/**/*.json"
+      type: "plugin_data"
+      editable: true
+    - pattern: "**/oxide/data/**/*.db"
+      type: "plugin_database"
+      editable: false
+      
+  # Log files
+  logs:
+    - pattern: "**/logs/*.log"
+      type: "server_log"
+      editable: false
+    - pattern: "**/oxide/logs/*.txt"
+      type: "plugin_log"
+      editable: false
+
+# Game-specific operations
+operations:
+  # Save world
+  save:
+    command: "server.save"
+    description: "Manually save the game world"
+    
+  # Wipe server
+  wipe:
+    command: "server.wipe"
+    description: "Wipe all server data (destructive)"
+    confirmationRequired: true
+    
+  # Broadcast message
+  broadcast:
+    command: "chat.say {MESSAGE}"
+    description: "Broadcast a message to all players"
+    parameters:
+      - name: MESSAGE
+        description: "Message to broadcast"
+        required: true
+

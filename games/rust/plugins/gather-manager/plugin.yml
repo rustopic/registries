@@ -1,0 +1,90 @@
+# Gather Manager Plugin Definition
+# Plugin for managing resource gathering rates and multipliers
+
+id: gather-manager
+name: Gather Manager
+version: "2.0.0"
+gameId: rust
+frameworkId: oxide
+
+description: |
+  Gather Manager allows server administrators to customize resource gathering
+  rates for different resources, tools, and player permissions. It provides
+  fine-grained control over gathering multipliers and can be configured per
+  resource type, tool type, and player group.
+
+# Plugin metadata
+metadata:
+  author: "Oxide Community"
+  repository: "https://github.com/OxideMod/Oxide.Rust"
+  category: "economy"
+  tags:
+    - "gathering"
+    - "resources"
+    - "economy"
+    - "multiplier"
+
+# Framework binding
+framework:
+  id: oxide
+  requiredVersion: "3.0.0"
+  
+# Plugin file location
+files:
+  # Plugin binary/source (relative to framework plugins directory)
+  plugin: "GatherManager.cs"
+  
+  # Configuration file (relative to framework config directory)
+  config: "GatherManager.json"
+  
+  # Data file (relative to framework data directory)
+  data: "GatherManager.json"
+
+# Plugin capabilities
+capabilities:
+  configurable: true
+  hotReload: true
+  permissions: true
+  dataPersistence: true
+
+# Reload behavior
+reload:
+  # Command to reload this plugin
+  command: "oxide.reload GatherManager"
+  
+  # Whether config changes require plugin reload
+  configRequiresReload: false
+  
+  # Whether data changes require plugin reload
+  dataRequiresReload: false
+
+# Configuration schema reference
+# The actual schema is defined in schema.yml
+config:
+  file: "GatherManager.json"
+  schema: "schema.yml"
+  
+# Permissions (if applicable)
+permissions:
+  - "gathermanager.admin"
+  - "gathermanager.multiplier"
+
+# Dependencies
+dependencies:
+  - framework: oxide
+    version: ">=3.0.0"
+
+# Plugin-specific operations
+operations:
+  reload:
+    command: "oxide.reload GatherManager"
+    description: "Reload Gather Manager plugin"
+    
+  save:
+    command: "gathermanager.save"
+    description: "Save current configuration"
+    
+  reset:
+    command: "gathermanager.reset"
+    description: "Reset configuration to defaults"
+

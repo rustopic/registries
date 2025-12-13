@@ -1,0 +1,68 @@
+# Rust Game Definition
+# Defines the Rust game server configuration and capabilities
+
+id: rust
+name: Rust
+version: "1.0.0"
+description: "Rust dedicated server configuration"
+
+# Docker image configuration
+image:
+  repository: steamcmd/steamcmd
+  tag: latest
+  pullPolicy: Always
+
+# Startup command template
+# Variables: {SERVER_NAME}, {SERVER_PORT}, {SERVER_IP}, {RUST_SERVER_IDENTITY}
+startup:
+  command: |
+    +login anonymous +force_install_dir /server +app_update 258550 validate +quit
+    ./RustDedicated -batchmode -nographics \
+      -server.hostname "{SERVER_NAME}" \
+      -server.port {SERVER_PORT} \
+      -server.ip {SERVER_IP} \
+      -server.identity "{RUST_SERVER_IDENTITY}" \
+      -server.maxplayers {MAX_PLAYERS} \
+      -server.worldsize {WORLD_SIZE} \
+      -server.seed {SEED} \
+      -server.saveinterval {SAVE_INTERVAL}
+
+# Supported capabilities
+capabilities:
+  mods: true
+  frameworks: true
+  hotReload: true
+  configFiles: true
+  resourceDiscovery: true
+
+# Default server settings
+defaults:
+  maxPlayers: 100
+  worldSize: 3000
+  saveInterval: 600
+  serverPort: 28015
+  queryPort: 28016
+  rconPort: 28017
+
+# Required environment variables
+environment:
+  - name: RUST_SERVER_IDENTITY
+    description: "Unique server identity folder name"
+    required: true
+  - name: SERVER_NAME
+    description: "Server display name"
+    required: true
+  - name: SERVER_PORT
+    description: "Game server port"
+    default: "28015"
+  - name: MAX_PLAYERS
+    description: "Maximum concurrent players"
+    default: "100"
+
+# File paths (relative to server root)
+paths:
+  config: "server/server.cfg"
+  identity: "server/{RUST_SERVER_IDENTITY}"
+  logs: "server/{RUST_SERVER_IDENTITY}/logs"
+  saves: "server/{RUST_SERVER_IDENTITY}/saves"
+

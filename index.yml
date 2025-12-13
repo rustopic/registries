@@ -1,0 +1,11 @@
+# Astralis Registry Index
+# This file lists all available games in the registry
+
+games:
+  - id: rust
+    name: Rust
+    path: games/rust
+    version: "1.0.0"
+    description: "Rust game server configuration"
+    enabled: true
+
