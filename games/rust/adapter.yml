@@ -7,20 +7,27 @@ version: "1.0.0"
 # Path mappings for resource discovery
 paths:
   # Server configuration files
-  serverConfig: "server/server.cfg"
+  serverConfig: "server/rustopic/cfg/server.cfg"
   
   # Identity-specific paths (identity folder name is runtime-provided)
-  identityRoot: "server/{IDENTITY}"
-  identityConfig: "server/{IDENTITY}/server.cfg"
-  identityLogs: "server/{IDENTITY}/logs"
-  identitySaves: "server/{IDENTITY}/saves"
+  identityRoot: "server/rustopic"
+  identityConfig: "server/rustopic/cfg/server.cfg"
+  identityLogs: "server/rustopic/logs"
+  identitySaves: "server/rustopic/saves"
   
   # Oxide framework paths
-  oxideRoot: "server/{IDENTITY}/oxide"
-  oxideConfig: "server/{IDENTITY}/oxide/config"
-  oxidePlugins: "server/{IDENTITY}/oxide/plugins"
-  oxideData: "server/{IDENTITY}/oxide/data"
-  oxideLang: "server/{IDENTITY}/oxide/lang"
+  oxideRoot: "server/rustopic/oxide"
+  oxideConfig: "server/rustopic/oxide/config"
+  oxidePlugins: "server/rustopic/oxide/plugins"
+  oxideData: "server/rustopic/oxide/data"
+  oxideLang: "server/rustopic/oxide/lang"
+  
+  # Carbon framework paths
+  carbonRoot: "server/rustopic/carbon"
+  carbonConfig: "server/rustopic/carbon/config"
+  carbonPlugins: "server/rustopic/carbon/plugins"
+  carbonData: "server/rustopic/carbon/data"
+  carbonLang: "server/rustopic/carbon/lang"
 
 # Reload command templates
 reload:
