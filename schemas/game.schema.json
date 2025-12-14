@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/game.schema.json",
+  "title": "Game Definition",
+  "description": "Schema for game server definitions",
+  "type": "object",
+  "required": ["id", "name", "version", "description", "capabilities"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "repository": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        },
+        "pullPolicy": {
+          "type": "string",
+          "enum": ["Always", "IfNotPresent", "Never"]
+        }
+      },
+      "additionalProperties": true
+    },
+    "installation": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "startup": {
+      "type": "object",
+      "required": ["command"],
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "done": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "mods": {
+          "type": "boolean"
+        },
+        "frameworks": {
+          "type": "boolean"
+        },
+        "hotReload": {
+          "type": "boolean"
+        },
+        "configFiles": {
+          "type": "boolean"
+        },
+        "resourceDiscovery": {
+          "type": "boolean"
+        },
+        "steamDiskSpace": {
+          "type": "boolean"
+        },
+        "wipe": {
+          "type": "boolean"
+        },
+        "variables": {
+          "type": "boolean"
+        }
+      },
+      "required": ["wipe"],
+      "additionalProperties": true
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "environment": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "maintenance": {
+          "type": "object",
+          "properties": {
+            "actions": {
+              "type": "array",
+              "items": {
+                "type": "object"
+              }
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "stop": {
+      "type": "object",
+      "properties": {
+        "command": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}

@@ -156,6 +156,7 @@ capabilities:
   resourceDiscovery: true
   steamDiskSpace: true
   wipe: true
+  variables: true
 
 # Default server settings
 defaults:
@@ -171,8 +172,171 @@ defaults:
   description: "Powered by Rustopic"
   serverUrl: "https://rustopic.com"
 
-# Environment variables
-# All variables from Pterodactyl Rust egg
+# Variable definitions for panel form rendering
+# These define server configuration variables with UI metadata
+variables:
+  - name: SERVER_NAME
+    label: "Server Name"
+    description: "The name of your server in the public server list."
+    default: "A Rustopic Server"
+    required: true
+    rules: "required|string|max:60"
+    fieldType: "text"
+    group: "General"
+    restartRequired: false
+    envKey: "HOSTNAME"
+    
+  - name: SERVER_IDENTITY
+    label: "Server Identity"
+    description: "Unique server identity folder name. This determines where server data, configs, and saves are stored."
+    default: "rustopic"
+    required: true
+    rules: "required|string|regex:/^[a-zA-Z0-9_-]+$/|max:64"
+    fieldType: "text"
+    group: "General"
+    restartRequired: true
+    
+  - name: SERVER_PORT
+    label: "Server Port"
+    description: "Game server port"
+    default: 28015
+    required: true
+    rules: "required|integer|min:1024|max:65535"
+    fieldType: "number"
+    group: "Networking"
+    restartRequired: true
+    min: 1024
+    max: 65535
+    userEditable: false
+    
+  - name: RCON_PORT
+    label: "RCON Port"
+    description: "Port for RCON connections."
+    default: 28016
+    required: true
+    rules: "required|integer|min:1024|max:65535"
+    fieldType: "number"
+    group: "Networking"
+    restartRequired: true
+    min: 1024
+    max: 65535
+    userEditable: false
+    
+  - name: RCON_PASS
+    label: "RCON Password"
+    description: "RCON access password."
+    default: ""
+    required: true
+    rules: "required|regex:/^[\\w.-]*$/|max:64"
+    fieldType: "password"
+    group: "Networking"
+    restartRequired: true
+    isSecret: true
+    
+  - name: MAP_SIZE
+    label: "Map Size"
+    description: "Size of the procedural map in meters"
+    default: 3500
+    required: true
+    rules: "required|integer|min:1000|max:6000"
+    fieldType: "number"
+    group: "World"
+    restartRequired: true
+    min: 1000
+    max: 6000
+    step: 100
+    envKey: "WORLD_SIZE"
+    
+  - name: MAP_SEED
+    label: "Map Seed"
+    description: "Seed value for procedural map generation (leave empty for random)"
+    default: ""
+    required: false
+    rules: "nullable|string"
+    fieldType: "number"
+    group: "World"
+    restartRequired: true
+    optional: true
+    envKey: "WORLD_SEED"
+    
+  - name: LEVEL
+    label: "World Level"
+    description: "The world file for Rust to use."
+    default: "Procedural Map"
+    required: true
+    rules: "required|string|max:20"
+    fieldType: "text"
+    group: "World"
+    restartRequired: true
+    
+  - name: DESCRIPTION
+    label: "Server Description"
+    description: "The description under your server title. Commonly used for rules & info. Use \\n for newlines."
+    default: "Powered by Rustopic"
+    required: true
+    rules: "required|string"
+    fieldType: "textarea"
+    group: "General"
+    restartRequired: false
+    
+  - name: SERVER_URL
+    label: "Server URL"
+    description: "The URL for your server. This is what comes up when clicking the \"Visit Website\" button."
+    default: "https://rustopic.com"
+    required: false
+    rules: "nullable|url"
+    fieldType: "text"
+    group: "General"
+    restartRequired: false
+    
+  - name: MAX_PLAYERS
+    label: "Max Players"
+    description: "The maximum amount of players allowed in the server at once."
+    default: 40
+    required: true
+    rules: "required|integer|min:1|max:500"
+    fieldType: "number"
+    group: "General"
+    restartRequired: true
+    min: 1
+    max: 500
+    envKey: "MAX_PLAYERS"
+    
+  - name: SAVEINTERVAL
+    label: "Save Interval"
+    description: "Sets the server's auto-save interval in seconds."
+    default: 300
+    required: true
+    rules: "required|integer|min:60|max:3600"
+    fieldType: "number"
+    group: "Advanced"
+    restartRequired: true
+    min: 60
+    max: 3600
+    
+  - name: BRANCH
+    label: "Steam Branch"
+    description: "Steam beta branch to use for server installation. Leave empty for stable release."
+    default: ""
+    required: false
+    rules: "nullable|in:staging,aux01,aux02,aux03"
+    fieldType: "select"
+    group: "Advanced"
+    restartRequired: false
+    options:
+      - value: ""
+        label: "Stable (Default)"
+      - value: "staging"
+        label: "Staging"
+      - value: "aux01"
+        label: "Auxiliary 01"
+      - value: "aux02"
+        label: "Auxiliary 02"
+      - value: "aux03"
+        label: "Auxiliary 03"
+
+# Legacy environment variables (for backward compatibility)
+# New code should use variables section above
 environment:
   - name: HOSTNAME
     description: "The name of your server in the public server list."

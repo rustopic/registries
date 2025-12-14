@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/index.schema.json",
+  "title": "Registry Index",
+  "description": "Registry index listing all available games",
+  "type": "object",
+  "required": ["specVersion", "games"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Must match manifest.yml specVersion"
+    },
+    "games": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/gameEntry"
+      },
+      "minItems": 1
+    }
+  },
+  "$defs": {
+    "gameEntry": {
+      "type": "object",
+      "required": ["id", "name", "path", "version", "description", "enabled"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Unique game identifier (lowercase, alphanumeric, hyphens)"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 100
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^games/[a-z0-9-]+$",
+          "description": "Relative path to game directory"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "enabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

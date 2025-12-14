@@ -1,0 +1,18 @@
+{
+  "name": "astralis-registries",
+  "version": "0.1.0",
+  "description": "Astralis game server registry",
+  "type": "module",
+  "scripts": {
+    "validate": "node tools/validate.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.12.0",
+    "ajv-formats": "^2.1.1",
+    "js-yaml": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
+

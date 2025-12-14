@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/plugin.schema.json",
+  "title": "Plugin Definition",
+  "description": "Schema for plugin definitions",
+  "type": "object",
+  "required": ["id", "name", "version", "gameId", "frameworkId"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "gameId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "frameworkId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "description": {
+      "type": "string"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "framework": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "reload": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "config": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true
+      }
+    },
+    "operations": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
+

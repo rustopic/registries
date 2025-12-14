@@ -8,11 +8,11 @@ version: "1.0.0"
 # {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
   # Server root path (absolute or relative to container root)
-  serverRoot: "server"
+  serverRoot: "/server"
   
   # Identity root template - used by Astralis to resolve server/identity/** paths
-  # Template format: server/{{identity}} where {{identity}} is replaced at runtime
-  identityRootTemplate: "server/{{identity}}"
+  # Template format: /server/{{identity}} where {{identity}} is replaced at runtime
+  identityRootTemplate: "/server/{{identity}}"
   
   # Server configuration files
   serverConfig: "server/{IDENTITY}/cfg/server.cfg"
@@ -36,6 +36,22 @@ paths:
   carbonPlugins: "server/{IDENTITY}/carbon/plugins"
   carbonData: "server/{IDENTITY}/carbon/data"
   carbonLang: "server/{IDENTITY}/carbon/lang"
+
+# Variable mapping for Astralis daemon
+# Maps registry variable names to environment variable keys
+variableMapping:
+  identityKey: "SERVER_IDENTITY"
+  portKey: "SERVER_PORT"
+  nameKey: "SERVER_NAME"
+
+# Action support configuration
+# Defines how Astralis should handle maintenance actions
+actionSupport:
+  wipe:
+    # Identity root path template for wipe operations
+    identityRoot: "{{paths.identityRootTemplate}}"
+    # Whether to use base delete patterns from wipeProfiles
+    baseDeletePatternsFromProfiles: true
 
 # Reload command templates
 reload:

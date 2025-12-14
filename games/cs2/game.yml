@@ -1,0 +1,148 @@
+# Counter-Strike 2 Game Definition
+# Defines the CS2 game server configuration and capabilities
+
+id: cs2
+name: Counter-Strike 2
+version: "1.0.0"
+description: |
+  Counter-Strike 2 is the largest technical leap forward in Counter-Strike's history,
+  supporting new maps, improved graphics, and enhanced gameplay mechanics.
+
+# Docker image configuration
+image:
+  repository: ghcr.io/rustopic/games
+  tag: cs2
+  pullPolicy: Always
+
+# Startup command template
+startup:
+  command: |
+    ./game/bin/linuxsteamrt64/cs2 -dedicated -console -usercon \
+      +game_type {{GAME_TYPE}} \
+      +game_mode {{GAME_MODE}} \
+      +map {{MAP}} \
+      +maxplayers {{MAX_PLAYERS}} \
+      +sv_setsteamaccount {{STEAM_ACCOUNT}} \
+      -port {{SERVER_PORT}} \
+      -tickrate {{TICKRATE}} \
+      {{ADDITIONAL_ARGS}}
+  
+  done: "Server startup complete"
+
+# Supported capabilities
+capabilities:
+  mods: false
+  frameworks: false
+  hotReload: false
+  configFiles: true
+  resourceDiscovery: true
+  steamDiskSpace: true
+  wipe: false
+  variables: true
+
+# Default server settings
+defaults:
+  maxPlayers: 10
+  serverPort: 27015
+  tickrate: 64
+  gameType: "0"
+  gameMode: "0"
+  map: "de_dust2"
+
+# Variable definitions for panel form rendering
+variables:
+  - name: SERVER_NAME
+    label: "Server Name"
+    description: "Server display name"
+    default: "CS2 Server"
+    required: true
+    rules: "required|string|max:64"
+    fieldType: "text"
+    group: "General"
+    restartRequired: false
+    envKey: "HOSTNAME"
+    
+  - name: SERVER_IDENTITY
+    label: "Server Identity"
+    description: "Unique server identity folder name"
+    default: "cs2"
+    required: true
+    rules: "required|string|regex:/^[a-zA-Z0-9_-]+$/|max:64"
+    fieldType: "text"
+    group: "General"
+    restartRequired: true
+    
+  - name: SERVER_PORT
+    label: "Server Port"
+    description: "Game server port"
+    default: 27015
+    required: true
+    rules: "required|integer|min:1024|max:65535"
+    fieldType: "number"
+    group: "Networking"
+    restartRequired: true
+    min: 1024
+    max: 65535
+    userEditable: false
+    
+  - name: MAX_PLAYERS
+    label: "Max Players"
+    description: "Maximum number of players"
+    default: 10
+    required: true
+    rules: "required|integer|min:1|max:64"
+    fieldType: "number"
+    group: "General"
+    restartRequired: true
+    min: 1
+    max: 64
+    
+  - name: TICKRATE
+    label: "Tickrate"
+    description: "Server tickrate"
+    default: 64
+    required: true
+    rules: "required|in:64,128"
+    fieldType: "select"
+    group: "Networking"
+    restartRequired: true
+    options:
+      - value: "64"
+        label: "64 Tick"
+      - value: "128"
+        label: "128 Tick"
+    
+  - name: STEAM_ACCOUNT
+    label: "Steam GSLT Token"
+    description: "Steam GSLT token for server authentication"
+    default: ""
+    required: true
+    rules: "required|string|regex:/^[0-9A-F]{32}$/"
+    fieldType: "password"
+    group: "Networking"
+    restartRequired: true
+    isSecret: true
+
+# Maintenance features and actions
+features:
+  maintenance:
+    actions:
+      - id: wipe
+        enabled: false
+        ui:
+          label: "Wipe Server"
+          description: "Wipe functionality is not available for Counter-Strike 2 servers"
+          category: "disabled"
+          hidden: true
+
+# File paths (relative to server root)
+paths:
+  config: "game/cs2/cfg/server.cfg"
+  identity: "server/{IDENTITY}"
+  logs: "game/cs2/logs"
+  saves: "server/{IDENTITY}/saves"
+
+# Server stop command
+stop:
+  command: "quit"
+

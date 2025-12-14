@@ -1,12 +1,22 @@
 # Astralis Registry Index
 # This file lists all available games in the registry
+# specVersion must match manifest.yml
+
+specVersion: "1.0"
 
 games:
   - id: rust
     name: Rust
     path: games/rust
     version: "1.0.0"
-    description: "Rust game server configuration"
+    description: "Rust game dedicatedserver configuration"
+    enabled: true
+    
+  - id: cs2
+    name: Counter-Strike 2
+    path: games/cs2
+    version: "1.0.0"
+    description: "Counter-Strike 2 dedicated server configuration"
     enabled: true
   
 

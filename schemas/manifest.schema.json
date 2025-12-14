@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/manifest.schema.json",
+  "title": "Registry Manifest",
+  "description": "Registry manifest defining specification version and compatibility",
+  "type": "object",
+  "required": ["specVersion", "registryVersion", "minDaemonVersion", "recommendedUpdateChannel", "generatedAt"],
+  "properties": {
+    "specVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+$",
+      "description": "Registry specification version (major.minor)"
+    },
+    "registryVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Registry content version (semantic versioning)"
+    },
+    "minDaemonVersion": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Minimum required Astralis daemon version"
+    },
+    "recommendedUpdateChannel": {
+      "type": "string",
+      "enum": ["stable", "beta", "alpha"],
+      "description": "Recommended update channel for daemon"
+    },
+    "generatedAt": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp when manifest was generated"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about this registry version"
+    }
+  },
+  "additionalProperties": false
+}
+

@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/adapter.schema.json",
+  "title": "Game Adapter",
+  "description": "Schema for game adapter configurations",
+  "type": "object",
+  "required": ["gameId", "version", "paths"],
+  "properties": {
+    "gameId": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "paths": {
+      "type": "object",
+      "required": ["serverRoot", "identityRootTemplate"],
+      "properties": {
+        "serverRoot": {
+          "type": "string",
+          "description": "Server root path (e.g., /server)"
+        },
+        "identityRootTemplate": {
+          "type": "string",
+          "pattern": ".*\\{\\{identity\\}\\}.*",
+          "description": "Template for identity root path (e.g., /server/{{identity}})"
+        },
+        "serverConfig": {
+          "type": "string"
+        },
+        "identityRoot": {
+          "type": "string"
+        },
+        "identityConfig": {
+          "type": "string"
+        },
+        "identityLogs": {
+          "type": "string"
+        },
+        "identitySaves": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "reload": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "discovery": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "operations": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "variableMapping": {
+      "type": "object",
+      "properties": {
+        "identityKey": {
+          "type": "string"
+        },
+        "portKey": {
+          "type": "string"
+        },
+        "nameKey": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "actionSupport": {
+      "type": "object",
+      "properties": {
+        "wipe": {
+          "type": "object",
+          "properties": {
+            "identityRoot": {
+              "type": "string"
+            },
+            "baseDeletePatternsFromProfiles": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": true
+}
+

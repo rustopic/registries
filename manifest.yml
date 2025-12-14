@@ -1,0 +1,13 @@
+# Astralis Registry Manifest
+# This file defines the registry specification version and compatibility requirements
+
+specVersion: "1.0"
+registryVersion: "0.1.0"
+minDaemonVersion: "0.1.0"
+recommendedUpdateChannel: "stable"
+generatedAt: "2025-01-13T00:00:00Z"
+notes: |
+  Initial production-grade registry specification.
+  Breaking changes will increment specVersion major number.
+  Registry version follows semantic versioning.
+

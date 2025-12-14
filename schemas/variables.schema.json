@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/07/schema",
+  "$id": "https://registry.rustopic.com/schemas/variables.schema.json",
+  "title": "Variable Definition",
+  "description": "Schema for variable definitions used in game configurations",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["name", "description", "required", "rules", "fieldType"],
+    "properties": {
+      "name": {
+        "type": "string",
+        "pattern": "^[A-Z_][A-Z0-9_]*$",
+        "description": "Variable name (uppercase, underscores)"
+      },
+      "description": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": {
+        "description": "Default value (type depends on fieldType)"
+      },
+      "required": {
+        "type": "boolean"
+      },
+      "rules": {
+        "type": "string",
+        "description": "Validation rules (Laravel-style)"
+      },
+      "fieldType": {
+        "type": "string",
+        "enum": ["text", "number", "select", "boolean", "textarea", "password"]
+      },
+      "label": {
+        "type": "string",
+        "description": "UI label (defaults to name if not provided)"
+      },
+      "group": {
+        "type": "string",
+        "enum": ["General", "Networking", "World", "Advanced"],
+        "description": "UI grouping for form rendering"
+      },
+      "restartRequired": {
+        "type": "boolean",
+        "default": false,
+        "description": "Whether changing this variable requires server restart"
+      },
+      "isSecret": {
+        "type": "boolean",
+        "default": false,
+        "description": "Whether this is a secret value (password, token, etc.)"
+      },
+      "envKey": {
+        "type": "string",
+        "description": "Environment variable key (defaults to name if not provided)"
+      },
+      "userEditable": {
+        "type": "boolean",
+        "default": true
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["value"],
+          "properties": {
+            "value": {},
+            "label": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "description": "Options for select/enum fields"
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "step": {
+        "type": "number"
+      }
+    },
+    "additionalProperties": true
+  }
+}
+

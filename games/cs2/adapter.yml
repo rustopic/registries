@@ -1,0 +1,74 @@
+# Counter-Strike 2 Game Adapter Configuration
+# Defines CS2-specific operations and path mappings
+
+gameId: cs2
+version: "1.0.0"
+
+# Path mappings for resource discovery
+paths:
+  # Server root path (absolute or relative to container root)
+  serverRoot: "/server"
+  
+  # Identity root template - used by Astralis to resolve server/identity/** paths
+  identityRootTemplate: "/server/{{identity}}"
+  
+  # Server configuration files
+  serverConfig: "game/cs2/cfg/server.cfg"
+  
+  # Identity-specific paths
+  identityRoot: "server/{IDENTITY}"
+  identityConfig: "game/cs2/cfg/server.cfg"
+  identityLogs: "game/cs2/logs"
+  identitySaves: "server/{IDENTITY}/saves"
+
+# Variable mapping for Astralis daemon
+variableMapping:
+  identityKey: "SERVER_IDENTITY"
+  portKey: "SERVER_PORT"
+  nameKey: "SERVER_NAME"
+
+# Action support configuration
+actionSupport:
+  wipe:
+    identityRoot: "{{paths.identityRootTemplate}}"
+    baseDeletePatternsFromProfiles: false
+
+# Reload command templates
+reload:
+  config:
+    command: "exec server.cfg"
+    description: "Reloads server.cfg configuration"
+
+# Resource discovery hints
+discovery:
+  configs:
+    - pattern: "**/server.cfg"
+      type: "server_config"
+      editable: true
+    - pattern: "**/*.cfg"
+      type: "game_config"
+      editable: true
+      
+  logs:
+    - pattern: "**/logs/*.log"
+      type: "server_log"
+      editable: false
+
+# Game-specific operations
+operations:
+  changeMap:
+    command: "changelevel {MAP_NAME}"
+    description: "Change to a different map"
+    parameters:
+      - name: MAP_NAME
+        description: "Name of the map to load"
+        required: true
+        
+  broadcast:
+    command: "say {MESSAGE}"
+    description: "Broadcast a message to all players"
+    parameters:
+      - name: MESSAGE
+        description: "Message to broadcast"
+        required: true
+
