@@ -33,11 +33,15 @@ paths:
   oxideLang: "server/{IDENTITY}/oxide/lang"
   
   # Carbon framework paths
-  carbonRoot: "server/{IDENTITY}/carbon"
-  carbonConfig: "server/{IDENTITY}/carbon/config"
-  carbonPlugins: "server/{IDENTITY}/carbon/plugins"
-  carbonData: "server/{IDENTITY}/carbon/data"
-  carbonLang: "server/{IDENTITY}/carbon/lang"
+  carbonRoot: "/carbon"
+  carbonConfig: "/carbon/configs"
+  carbonPlugins: "/carbon/plugins"
+  carbonExtensions: "/carbon/extensions"
+  carbonData: "/carbon/data"
+  carbonLang: "/carbon/lang"
+  carbonManaged: "/carbon/managed"
+  carbonTools: "/carbon/tools"
+  carbonNative: "/carbon/native"
 
 # Variable mapping for Astralis daemon
 # Maps registry variable names to environment variable keys
