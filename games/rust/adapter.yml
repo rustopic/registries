@@ -8,7 +8,9 @@ version: "1.0.0"
 # {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
 paths:
   # Server root path (absolute or relative to container root)
-  serverRoot: "/server"
+  serverRoot: "/home/container"
+
+  mountTarget: "/mnt/server"
   
   # Identity root template - used by Astralis to resolve server/identity/** paths
   # Template format: /server/{{identity}} where {{identity}} is replaced at runtime
