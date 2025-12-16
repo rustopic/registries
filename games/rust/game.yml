@@ -1,650 +1,233 @@
 # Rust Game Definition
-# Defines the Rust game server configuration and capabilities
+# Based on Pterodactyl Rust Egg
+# DO NOT EDIT: This file is based on Pterodactyl panel egg structure
 
-id: rust
 name: Rust
-version: "1.0.0"
+author: support@pterodactyl.io
 description: |
   The only aim in Rust is to survive. To do this you will need to overcome struggles
   such as hunger, thirst and cold. Build a fire. Build a shelter. Kill animals for meat.
   Protect yourself from other players, and kill them for meat. Create alliances with
   other players and form a town. Do whatever it takes to survive.
 
-# Docker image configuration
-image:
-  repository: ghcr.io/rustopic/games
-  tag: rust
-  pullPolicy: Always
-
-# Installation script configuration
-installation:
-  container: ghcr.io/rustopic/installers:debian
-  entrypoint: bash
-  script: |
-    #!/bin/bash
-    # steamcmd Base Installation Script
-    # Server Files: /mnt/server
-    
-    # ANSI color codes
-    RED='\033[0;31m'
-    GREEN='\033[0;32m'
-    YELLOW='\033[1;33m'
-    BLUE='\033[0;34m'
-    MAGENTA='\033[0;35m'
-    CYAN='\033[0;36m'
-    WHITE='\033[1;37m'
-    BOLD='\033[1m'
-    NC='\033[0m' # No Color
-    
-    SRCDS_APPID=258550
-    
-    echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${CYAN}${BOLD}║          Rust Server Installation Script                 ║${NC}"
-    echo -e "${CYAN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-    
-    ## just in case someone removed the defaults.
-    if [ "${STEAM_USER}" == "" ]; then
-      echo -e "${YELLOW}⚠️  Steam user is not set.${NC}"
-      echo -e "${BLUE}ℹ️  Using anonymous user for installation.${NC}"
-      echo ""
-      STEAM_USER=anonymous
-      STEAM_PASS=""
-      STEAM_AUTH=""
-    else
-      echo -e "${GREEN}✓ Steam user set to: ${WHITE}${BOLD}${STEAM_USER}${NC}"
-      echo ""
-    fi
-    
-    ## download and install steamcmd
-    echo -e "${CYAN}${BOLD}[1/4]${NC} ${WHITE}Downloading SteamCMD...${NC}"
-    cd /tmp
-    mkdir -p /mnt/server/steamcmd
-    
-    if curl -sSL -o steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz; then
-      echo -e "${GREEN}✓ SteamCMD downloaded successfully${NC}"
-    else
-      echo -e "${RED}✗ Failed to download SteamCMD${NC}"
-      exit 1
-    fi
-    
-    echo -e "${CYAN}${BOLD}[2/4]${NC} ${WHITE}Extracting SteamCMD...${NC}"
-    if tar -xzvf steamcmd.tar.gz -C /mnt/server/steamcmd > /dev/null 2>&1; then
-      echo -e "${GREEN}✓ SteamCMD extracted successfully${NC}"
-    else
-      echo -e "${RED}✗ Failed to extract SteamCMD${NC}"
-      exit 1
-    fi
-    
-    mkdir -p /mnt/server/steamapps # Fix steamcmd disk write error when this folder is missing
-    cd /mnt/server/steamcmd
-    
-    # SteamCMD fails otherwise for some reason, even running as root.
-    # This is changed at the end of the install process anyways.
-    echo -e "${CYAN}${BOLD}[3/4]${NC} ${WHITE}Setting up permissions...${NC}"
-    chown -R root:root /mnt
-    export HOME=/mnt/server
-    echo -e "${GREEN}✓ Permissions configured${NC}"
-    echo ""
-    
-    ## install game using steamcmd
-    echo -e "${CYAN}${BOLD}[4/4]${NC} ${WHITE}Installing Rust server files...${NC}"
-    
-    # Add beta branch if specified
-    BRANCH_ARG=""
-    if [ -n "${BRANCH}" ]; then
-      echo -e "${MAGENTA}ℹ️  Using beta branch: ${WHITE}${BOLD}${BRANCH}${NC}"
-      BRANCH_ARG="-beta ${BRANCH}"
-    else
-      echo -e "${BLUE}ℹ️  Installing stable release${NC}"
-    fi
-    
-    echo -e "${YELLOW}⏳ This may take several minutes depending on your connection...${NC}"
-    echo ""
-    
-    if ./steamcmd.sh +force_install_dir /mnt/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} ${BRANCH_ARG} ${EXTRA_FLAGS} validate +quit; then
-      echo ""
-      echo -e "${GREEN}✓ Rust server files installed successfully${NC}"
-    else
-      echo ""
-      echo -e "${RED}✗ Failed to install Rust server files${NC}"
-      exit 1
-    fi
-    
-    echo ""
-    echo -e "${CYAN}${BOLD}Setting up Steam libraries...${NC}"
-    
-    ## set up 32 bit libraries
-    echo -e "${BLUE}→ Copying 32-bit Steam libraries...${NC}"
-    mkdir -p /mnt/server/.steam/sdk32
-    if cp -v linux32/steamclient.so ../.steam/sdk32/steamclient.so > /dev/null 2>&1; then
-      echo -e "${GREEN}✓ 32-bit libraries configured${NC}"
-    else
-      echo -e "${YELLOW}⚠️  Warning: Could not copy 32-bit libraries${NC}"
-    fi
-    
-    ## set up 64 bit libraries
-    echo -e "${BLUE}→ Copying 64-bit Steam libraries...${NC}"
-    mkdir -p /mnt/server/.steam/sdk64
-    if cp -v linux64/steamclient.so ../.steam/sdk64/steamclient.so > /dev/null 2>&1; then
-      echo -e "${GREEN}✓ 64-bit libraries configured${NC}"
-    else
-      echo -e "${YELLOW}⚠️  Warning: Could not copy 64-bit libraries${NC}"
-    fi
-    
-    echo ""
-    echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}${BOLD}║     ✓ Rust Server Installation Completed Successfully!     ║${NC}"
-    echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
-    echo ""
-
-# Startup command template
-# Variables are replaced at runtime: {{SERVER_PORT}}, {{QUERY_PORT}}, {{RCON_PORT}}, etc.
-startup:
-  command: |
-    ./RustDedicated -batchmode +server.port {{SERVER_PORT}} +server.queryport {{QUERY_PORT}} +server.identity "{{SERVER_IDENTITY}}" +rcon.port {{RCON_PORT}} +rcon.web true +server.hostname "{{HOSTNAME}}" +server.level "{{LEVEL}}" +server.description "{{DESCRIPTION}}" +server.url "{{SERVER_URL}}" +server.headerimage "{{SERVER_IMG}}" +server.logoimage "{{SERVER_LOGO}}" +server.maxplayers {{MAX_PLAYERS}} +rcon.password "{{RCON_PASS}}" +server.saveinterval {{SAVEINTERVAL}} +app.port {{APP_PORT}} $( [ -z ${MAP_URL} ] && printf %s "+server.worldsize \"{{WORLD_SIZE}}\" +server.seed \"{{WORLD_SEED}}\"" || printf %s "+server.levelurl {{MAP_URL}}" ) {{ADDITIONAL_ARGS}}
-  
-  # Server startup detection
-  done: "Server startup complete"
-
-# Supported capabilities
-capabilities:
-  mods: true
-  frameworks: true
-  hotReload: true
-  configFiles: true
-  resourceDiscovery: true
-  steamDiskSpace: true
-  wipe: true
-  variables: true
-
-# Default server settings
-defaults:
-  maxPlayers: 100
-  worldSize: 3000
-  saveInterval: 300
-  serverPort: 28015
-  queryPort: 27017
-  rconPort: 28016
-  appPort: 28082
-  level: "Procedural Map"
-  hostname: "A Rustopic Server"
-  description: "Powered by Rustopic"
-  serverUrl: "https://rustopic.com"
-
-# Variable definitions for panel form rendering
-# These define server configuration variables with UI metadata
-variables:
-  - name: SERVER_NAME
-    label: "Server Name"
-    description: "The name of your server in the public server list."
-    default: "A Rustopic Server"
-    required: true
-    rules: "required|string|max:60"
-    fieldType: "text"
-    group: "General"
-    restartRequired: false
-    envKey: "HOSTNAME"
-    
-  - name: SERVER_IDENTITY
-    label: "Server Identity"
-    description: "Unique server identity folder name. This determines where server data, configs, and saves are stored."
-    default: "rustopic"
-    required: true
-    rules: "required|string|regex:/^[a-zA-Z0-9_-]+$/|max:64"
-    fieldType: "text"
-    group: "General"
-    restartRequired: true
-    
-  - name: SERVER_PORT
-    label: "Server Port"
-    description: "Game server port"
-    default: 28015
-    required: true
-    rules: "required|integer|min:1024|max:65535"
-    fieldType: "number"
-    group: "Networking"
-    restartRequired: true
-    min: 1024
-    max: 65535
-    userEditable: false
-    
-  - name: RCON_PORT
-    label: "RCON Port"
-    description: "Port for RCON connections."
-    default: 28016
-    required: true
-    rules: "required|integer|min:1024|max:65535"
-    fieldType: "number"
-    group: "Networking"
-    restartRequired: true
-    min: 1024
-    max: 65535
-    userEditable: false
-    
-  - name: RCON_PASS
-    label: "RCON Password"
-    description: "RCON access password."
-    default: ""
-    required: true
-    rules: "required|regex:/^[\\w.-]*$/|max:64"
-    fieldType: "password"
-    group: "Networking"
-    restartRequired: true
-    isSecret: true
-    
-  - name: MAP_SIZE
-    label: "Map Size"
-    description: "Size of the procedural map in meters"
-    default: 3500
-    required: true
-    rules: "required|integer|min:1000|max:6000"
-    fieldType: "number"
-    group: "World"
-    restartRequired: true
-    min: 1000
-    max: 6000
-    step: 100
-    envKey: "WORLD_SIZE"
-    
-  - name: MAP_SEED
-    label: "Map Seed"
-    description: "Seed value for procedural map generation (leave empty for random)"
-    default: ""
-    required: false
-    rules: "nullable|string"
-    fieldType: "number"
-    group: "World"
-    restartRequired: true
-    optional: true
-    envKey: "WORLD_SEED"
-    
-  - name: LEVEL
-    label: "World Level"
-    description: "The world file for Rust to use."
-    default: "Procedural Map"
-    required: true
-    rules: "required|string|max:20"
-    fieldType: "text"
-    group: "World"
-    restartRequired: true
-    
-  - name: DESCRIPTION
-    label: "Server Description"
-    description: "The description under your server title. Commonly used for rules & info. Use \\n for newlines."
-    default: "Powered by Rustopic"
-    required: true
-    rules: "required|string"
-    fieldType: "textarea"
-    group: "General"
-    restartRequired: false
-    
-  - name: SERVER_URL
-    label: "Server URL"
-    description: "The URL for your server. This is what comes up when clicking the \"Visit Website\" button."
-    default: "https://rustopic.com"
-    required: false
-    rules: "nullable|url"
-    fieldType: "text"
-    group: "General"
-    restartRequired: false
-    
-  - name: MAX_PLAYERS
-    label: "Max Players"
-    description: "The maximum amount of players allowed in the server at once."
-    default: 40
-    required: true
-    rules: "required|integer|min:1|max:500"
-    fieldType: "number"
-    group: "General"
-    restartRequired: true
-    min: 1
-    max: 500
-    envKey: "MAX_PLAYERS"
-    
-  - name: SAVEINTERVAL
-    label: "Save Interval"
-    description: "Sets the server's auto-save interval in seconds."
-    default: 300
-    required: true
-    rules: "required|integer|min:60|max:3600"
-    fieldType: "number"
-    group: "Advanced"
-    restartRequired: true
-    min: 60
-    max: 3600
-    
-  - name: BRANCH
-    label: "Steam Branch"
-    description: "Steam beta branch to use for server installation. Leave empty for stable release."
-    default: ""
-    required: false
-    rules: "nullable|in:staging,aux01,aux02,aux03"
-    fieldType: "select"
-    group: "Advanced"
-    restartRequired: false
-    options:
-      - value: ""
-        label: "Stable (Default)"
-      - value: "staging"
-        label: "Staging"
-      - value: "aux01"
-        label: "Auxiliary 01"
-      - value: "aux02"
-        label: "Auxiliary 02"
-      - value: "aux03"
-        label: "Auxiliary 03"
-
-# Legacy environment variables (for backward compatibility)
-# New code should use variables section above
-environment:
-  - name: HOSTNAME
-    description: "The name of your server in the public server list."
-    default: "A Rustopic Server"
-    required: true
-    rules: "required|string|max:60"
-    fieldType: "text"
-    
-  - name: LEVEL
-    description: "The world file for Rust to use."
-    default: "Procedural Map"
-    required: true
-    rules: "required|string|max:20"
-    fieldType: "text"
-    
-  - name: DESCRIPTION
-    description: "The description under your server title. Commonly used for rules & info. Use \\n for newlines."
-    default: "Powered by Rustopic"
-    required: true
-    rules: "required|string"
-    fieldType: "text"
-    
-  - name: SERVER_URL
-    description: "The URL for your server. This is what comes up when clicking the \"Visit Website\" button."
-    default: "https://rustopic.com"
-    required: false
-    rules: "nullable|url"
-    fieldType: "text"
-    
-  - name: WORLD_SIZE
-    description: "The world size for a procedural map."
-    default: "3000"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    
-  - name: WORLD_SEED
-    description: "The seed for a procedural map."
-    default: ""
-    required: false
-    rules: "nullable|string"
-    fieldType: "text"
-    
-  - name: MAX_PLAYERS
-    description: "The maximum amount of players allowed in the server at once."
-    default: "40"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    
-  - name: SERVER_IMG
-    description: "The header image for the top of your server listing."
-    default: ""
-    required: false
-    rules: "nullable|url"
-    fieldType: "text"
-    
-  - name: QUERY_PORT
-    description: "Server Query Port. Can't be the same as Game's primary port."
-    default: "27017"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    userEditable: false
-    
-  - name: RCON_PORT
-    description: "Port for RCON connections."
-    default: "28016"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    userEditable: false
-    
-  - name: RCON_PASS
-    description: "RCON access password."
-    default: ""
-    required: true
-    rules: "required|regex:/^[\\w.-]*$/|max:64"
-    fieldType: "text"
-    
-  - name: SAVEINTERVAL
-    description: "Sets the server's auto-save interval in seconds."
-    default: "60"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    
-  - name: ADDITIONAL_ARGS
-    description: "Add additional startup parameters to the server."
-    default: ""
-    required: false
-    rules: "nullable|string"
-    fieldType: "text"
-    
-  - name: APP_PORT
-    description: "Port for the Rust+ App. -1 to disable."
-    default: "28082"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    userEditable: false
-    
-  - name: SERVER_LOGO
-    description: "The circular server logo for the Rust+ app."
-    default: ""
-    required: false
-    rules: "nullable|url"
-    fieldType: "text"
-    
-  - name: MAP_URL
-    description: "Overwrites the map with the one from the direct download URL. Invalid URLs will cause the server to crash."
-    default: ""
-    required: false
-    rules: "nullable|url"
-    fieldType: "text"
-    
-  - name: SERVER_PORT
-    description: "Game server port"
-    default: "28015"
-    required: true
-    rules: "required|integer"
-    fieldType: "text"
-    userEditable: false
-    
-  - name: SERVER_IDENTITY
-    description: "Unique server identity folder name. This determines where server data, configs, and saves are stored."
-    default: "rustopic"
-    required: true
-    rules: "required|string|regex:/^[a-zA-Z0-9_-]+$/|max:64"
-    fieldType: "text"
-    
-  - name: BRANCH
-    description: "Steam beta branch to use for server installation. Leave empty for stable release."
-    default: ""
-    required: false
-    rules: "nullable|in:staging,aux01,aux02,aux03"
-    fieldType: "select"
-    options:
-      - value: ""
-        label: "Stable (Default)"
-      - value: "staging"
-        label: "Staging"
-      - value: "aux01"
-        label: "Auxiliary 01"
-      - value: "aux02"
-        label: "Auxiliary 02"
-      - value: "aux03"
-        label: "Auxiliary 03"
-
-# Maintenance features and actions
-# These define available maintenance operations that can be performed on the server
 features:
-  maintenance:
-    actions:
-      - id: wipe
-        enabled: true
-        ui:
-          label: "Wipe Server"
-          description: "Reset server data by deleting files. Astralis will stop the server, delete specified files, then restart. This action is destructive and cannot be undone."
-          category: "destructive"
-          icon: "trash"
-          color: "danger"
-        # Wipe behavior: Astralis stops server, deletes files under server/identity/**, then starts again
-        # NO command triggering - file deletion is handled by the daemon
-        form:
-          fields:
-            - key: wipeType
-              type: enum
-              label: "Wipe Type"
-              description: "Type of wipe to perform"
-              default: "map_wipe"
-              required: true
-              options:
-                - value: "map_wipe"
-                  label: "Map Wipe"
-                  description: "Delete map files and player data, keep server configs"
-                - value: "full_wipe"
-                  label: "Full Wipe"
-                  description: "Delete all files in the identity directory"
-            
-            - key: mapSource
-              type: enum
-              label: "Map Source"
-              description: "How to generate the new map after wipe"
-              default: "procedural"
-              required: true
-              options:
-                - value: "procedural"
-                  label: "Procedural Map"
-                  description: "Generate a new procedural map with seed and size"
-                - value: "custom_url"
-                  label: "Custom Map URL"
-                  description: "Download and use a custom map from URL"
-            
-            - key: seed
-              type: number
-              label: "Map Seed"
-              description: "Seed value for procedural map generation (leave empty for random). Only used when mapSource=procedural"
-              optional: true
-              min: 0
-              max: 2147483647
-              conditional:
-                field: "mapSource"
-                value: "procedural"
-            
-            - key: size
-              type: number
-              label: "Map Size"
-              description: "Size of the procedural map in meters. Only used when mapSource=procedural"
-              default: 3500
-              min: 1000
-              max: 6000
-              step: 100
-              conditional:
-                field: "mapSource"
-                value: "procedural"
-            
-            - key: customMapUrl
-              type: string
-              label: "Custom Map URL"
-              description: "Direct download URL for custom map file. Required when mapSource=custom_url"
-              optional: true
-              rules: "nullable|url"
-              conditional:
-                field: "mapSource"
-                value: "custom_url"
-            
-            - key: extraDeletePatterns
-              type: array
-              label: "Extra Delete Patterns"
-              description: "Additional file patterns to delete (relative to identity root). Patterns are validated to prevent path traversal. Use glob patterns like 'logs/*.log' or 'data/**/*.db'"
-              default: []
-              itemType: string
-              optional: true
-              validation:
-                - rule: "no_path_traversal"
-                  message: "Patterns must not contain '..' or absolute paths"
-            
-            - key: dryRun
-              type: boolean
-              label: "Dry Run"
-              description: "Preview what would be deleted without actually deleting files (useful for development/testing)"
-              default: false
-              optional: true
-        
-        # Wipe profiles define default delete patterns for each wipe type
-        # All patterns are relative to server/identity/** (identity root)
-        # Patterns support glob syntax (e.g., *.sav, logs/*, **/*.db)
-        # IMPORTANT: cfg/** directory is NEVER deleted in any wipe type
-        wipeProfiles:
-          map_wipe:
-            # Map wipe: Delete everything except cfg/**, player.tokens.db, and player.blueprints.db
-            delete:
-              # Delete all files and directories
-              - "**/*"
-            exclude:
-              # Never delete configuration files
-              - "cfg/**"
-              # Preserve player tokens database
-              - "player.tokens.db"
-              # Preserve player blueprints database
-              - "player.blueprints.db"
-          full_wipe:
-            # Full wipe: Delete everything except cfg/**
-            delete:
-              # Delete all files and directories
-              - "**/*"
-            exclude:
-              # Never delete configuration files
-              - "cfg/**"
-        
-        confirmation:
-          required: true
-          message: "Are you sure you want to wipe the server? This will stop the server, delete files, and restart. This action cannot be undone."
-          destructive: true
+  - steam_disk_space
+
+docker_images:
+  ghcr.io/pterodactyl/games:rust: ghcr.io/pterodactyl/games:rust
+
+file_denylist: []
+
+startup: "./RustDedicated -batchmode +server.port {{SERVER_PORT}} +server.queryport {{QUERY_PORT}} +server.identity \"rust\" +rcon.port {{RCON_PORT}} +rcon.web true +server.hostname \"{{HOSTNAME}}\" +server.level \"{{LEVEL}}\" +server.description \"{{DESCRIPTION}}\" +server.url \"{{SERVER_URL}}\" +server.headerimage \"{{SERVER_IMG}}\" +server.logoimage \"{{SERVER_LOGO}}\" +server.maxplayers {{MAX_PLAYERS}} +rcon.password \"{{RCON_PASS}}\" +server.saveinterval {{SAVEINTERVAL}} +app.port {{APP_PORT}} $( [ -z ${MAP_URL} ] && printf %s \"+server.worldsize \\\"{{WORLD_SIZE}}\\\" +server.seed \\\"{{WORLD_SEED}}\\\"\" || printf %s \"+server.levelurl {{MAP_URL}}\" ) {{ADDITIONAL_ARGS}}"
+
+config:
+  files: "{}"
+  startup: |
+    {
+      "done": "Server startup complete"
+    }
+  logs: "{}"
+  stop: "quit"
+
+scripts:
+  installation:
+    script: |
+      #!/bin/bash
+      # steamcmd Base Installation Script
+      #
+      # Server Files: /mnt/server
       
-      - id: verify_files
-        enabled: true
-        ui:
-          label: "Verify Files"
-          description: "Verify server file integrity and repair corrupted files"
-          category: "maintenance"
-          icon: "check-circle"
-          color: "info"
-        form:
-          fields:
-            - key: validate
-              type: boolean
-              label: "Validate Files"
-              description: "Perform full validation of all game files"
-              default: true
-              required: true
-        command:
-          template: "server.verify {validate}"
-          parameters:
-            validate: "{validate}"
+      SRCDS_APPID=258550
+      
+      ## just in case someone removed the defaults.
+      if [ "${STEAM_USER}" == "" ]; then
+        echo -e "steam user is not set.\n"
+        echo -e "Using anonymous user.\n"
+        STEAM_USER=anonymous
+        STEAM_PASS=""
+        STEAM_AUTH=""
+      else
+        echo -e "user set to ${STEAM_USER}"
+      fi
+      
+      ## download and install steamcmd
+      cd /tmp
+      mkdir -p /mnt/server/steamcmd
+      curl -sSL -o steamcmd.tar.gz https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+      tar -xzvf steamcmd.tar.gz -C /mnt/server/steamcmd
+      mkdir -p /mnt/server/steamapps # Fix steamcmd disk write error when this folder is missing
+      cd /mnt/server/steamcmd
+      
+      # SteamCMD fails otherwise for some reason, even running as root.
+      # This is changed at the end of the install process anyways.
+      chown -R root:root /mnt
+      export HOME=/mnt/server
+      
+      ## install game using steamcmd
+      ./steamcmd.sh +force_install_dir /mnt/server +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} +app_update ${SRCDS_APPID} ${EXTRA_FLAGS} validate +quit ## other flags may be needed depending on install. looking at you cs 1.6
+      
+      ## set up 32 bit libraries
+      mkdir -p /mnt/server/.steam/sdk32
+      cp -v linux32/steamclient.so ../.steam/sdk32/steamclient.so
+      
+      ## set up 64 bit libraries
+      mkdir -p /mnt/server/.steam/sdk64
+      cp -v linux64/steamclient.so ../.steam/sdk64/steamclient.so
+    container: ghcr.io/pterodactyl/installers:debian
+    entrypoint: bash
 
-# File paths (relative to server root)
-# {IDENTITY} placeholder is replaced with SERVER_IDENTITY variable value at runtime
-paths:
-  config: "server/{IDENTITY}/cfg/server.cfg"
-  identity: "server/{IDENTITY}"
-  logs: "server/{IDENTITY}/logs"
-  saves: "server/{IDENTITY}/saves"
-  steamcmd: "steamcmd"
-  steamapps: "steamapps"
-
-# Server stop command
-stop:
-  command: "quit"
-
+variables:
+  - name: Server Name
+    description: "The name of your server in the public server list."
+    env_variable: HOSTNAME
+    default_value: "A Rust Server"
+    user_viewable: true
+    user_editable: true
+    rules: "required|string|max:60"
+    field_type: "text"
+    
+  - name: Modding Framework
+    description: |
+      The modding framework to be used: carbon, oxide, vanilla.
+      Defaults to "vanilla" for a non-modded server installation.
+    env_variable: FRAMEWORK
+    default_value: "vanilla"
+    user_viewable: true
+    user_editable: true
+    rules: "required|in:vanilla,oxide,carbon"
+    field_type: "text"
+    
+  - name: Level
+    description: "The world file for Rust to use."
+    env_variable: LEVEL
+    default_value: "Procedural Map"
+    user_viewable: true
+    user_editable: true
+    rules: "required|string|max:20"
+    field_type: "text"
+    
+  - name: Description
+    description: "The description under your server title. Commonly used for rules & info. Use \\n for newlines."
+    env_variable: DESCRIPTION
+    default_value: "Powered by Pterodactyl"
+    user_viewable: true
+    user_editable: true
+    rules: "required|string"
+    field_type: "text"
+    
+  - name: URL
+    description: "The URL for your server. This is what comes up when clicking the \"Visit Website\" button."
+    env_variable: SERVER_URL
+    default_value: "http://pterodactyl.io"
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|url"
+    field_type: "text"
+    
+  - name: World Size
+    description: "The world size for a procedural map."
+    env_variable: WORLD_SIZE
+    default_value: "3000"
+    user_viewable: true
+    user_editable: true
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: World Seed
+    description: "The seed for a procedural map."
+    env_variable: WORLD_SEED
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|string"
+    field_type: "text"
+    
+  - name: Max Players
+    description: "The maximum amount of players allowed in the server at once."
+    env_variable: MAX_PLAYERS
+    default_value: "40"
+    user_viewable: true
+    user_editable: true
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: Server Image
+    description: "The header image for the top of your server listing."
+    env_variable: SERVER_IMG
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|url"
+    field_type: "text"
+    
+  - name: Query Port
+    description: "Server Query Port. Can't be the same as Game's primary port."
+    env_variable: QUERY_PORT
+    default_value: "27017"
+    user_viewable: true
+    user_editable: false
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: RCON Port
+    description: "Port for RCON connections."
+    env_variable: RCON_PORT
+    default_value: "28016"
+    user_viewable: true
+    user_editable: false
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: RCON Password
+    description: "RCON access password."
+    env_variable: RCON_PASS
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "required|regex:/^[\\w.-]*$/|max:64"
+    field_type: "text"
+    
+  - name: Save Interval
+    description: "Sets the server's auto-save interval in seconds."
+    env_variable: SAVEINTERVAL
+    default_value: "60"
+    user_viewable: true
+    user_editable: true
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: Additional Arguments
+    description: "Add additional startup parameters to the server."
+    env_variable: ADDITIONAL_ARGS
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|string"
+    field_type: "text"
+    
+  - name: App Port
+    description: "Port for the Rust+ App. -1 to disable."
+    env_variable: APP_PORT
+    default_value: "28082"
+    user_viewable: true
+    user_editable: false
+    rules: "required|integer"
+    field_type: "text"
+    
+  - name: Server Logo
+    description: "The circular server logo for the Rust+ app."
+    env_variable: SERVER_LOGO
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|url"
+    field_type: "text"
+    
+  - name: Custom Map URL
+    description: "Overwrites the map with the one from the direct download URL. Invalid URLs will cause the server to crash."
+    env_variable: MAP_URL
+    default_value: ""
+    user_viewable: true
+    user_editable: true
+    rules: "nullable|url"
+    field_type: "text"

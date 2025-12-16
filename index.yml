@@ -9,14 +9,7 @@ games:
     name: Rust
     path: games/rust
     version: "1.0.0"
-    description: "Rust game dedicatedserver configuration"
-    enabled: true
-    
-  - id: cs2
-    name: Counter-Strike 2
-    path: games/cs2
-    version: "1.0.0"
-    description: "Counter-Strike 2 dedicated server configuration"
+    description: "Rust game server configuration"
     enabled: true
   
 
