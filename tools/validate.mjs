@@ -121,75 +121,9 @@ if (index) {
       if (gameData) {
         validateSchema(gameData, 'game', gameYml);
         
-        // Check game ID matches
-        if (gameData.id !== game.id) {
-          errors.push(`Game ${game.id}: game.yml id (${gameData.id}) does not match index`);
-        }
-      }
-    }
-    
-    // Check adapter.yml exists
-    const adapterYml = path.join(gameDir, 'adapter.yml');
-    if (!fs.existsSync(adapterYml)) {
-      errors.push(`Game ${game.id}: adapter.yml not found`);
-    } else {
-      const adapterData = readYAML(adapterYml);
-      if (adapterData) {
-        validateSchema(adapterData, 'adapter', adapterYml);
-        
-        // Check gameId matches
-        if (adapterData.gameId !== game.id) {
-          errors.push(`Game ${game.id}: adapter.yml gameId (${adapterData.gameId}) does not match`);
-        }
-      }
-    }
-    
-    // Check frameworks
-    const frameworksDir = path.join(gameDir, 'frameworks');
-    if (fs.existsSync(frameworksDir)) {
-      const frameworkFiles = fs.readdirSync(frameworksDir)
-        .filter(f => f.endsWith('.yml'));
-      
-      for (const frameworkFile of frameworkFiles) {
-        const frameworkPath = path.join(frameworksDir, frameworkFile);
-        const frameworkData = readYAML(frameworkPath);
-        if (frameworkData) {
-          validateSchema(frameworkData, 'framework', frameworkPath);
-          
-          if (frameworkData.gameId !== game.id) {
-            errors.push(`Framework ${frameworkFile}: gameId (${frameworkData.gameId}) does not match game ${game.id}`);
-          }
-        }
-      }
-    }
-    
-    // Check plugins
-    const pluginsDir = path.join(gameDir, 'plugins');
-    if (fs.existsSync(pluginsDir)) {
-      const pluginDirs = fs.readdirSync(pluginsDir, { withFileTypes: true })
-        .filter(d => d.isDirectory())
-        .map(d => d.name);
-      
-      for (const pluginId of pluginDirs) {
-        const pluginDir = path.join(pluginsDir, pluginId);
-        const pluginYml = path.join(pluginDir, 'plugin.yml');
-        const schemaYml = path.join(pluginDir, 'schema.yml');
-        
-        if (!fs.existsSync(pluginYml)) {
-          errors.push(`Plugin ${pluginId}: plugin.yml not found`);
-        } else {
-          const pluginData = readYAML(pluginYml);
-          if (pluginData) {
-            validateSchema(pluginData, 'plugin', pluginYml);
-            
-            if (pluginData.gameId !== game.id) {
-              errors.push(`Plugin ${pluginId}: gameId (${pluginData.gameId}) does not match game ${game.id}`);
-            }
-          }
-        }
-        
-        if (!fs.existsSync(schemaYml)) {
-          warnings.push(`Plugin ${pluginId}: schema.yml not found (optional but recommended)`);
+        // Check game name matches index (optional check)
+        if (gameData.name && gameData.name !== game.name) {
+          warnings.push(`Game ${game.id}: game.yml name (${gameData.name}) does not match index name (${game.name})`);
         }
       }
     }

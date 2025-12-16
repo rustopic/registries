@@ -4,114 +4,82 @@
   "title": "Game Definition",
   "description": "Schema for game server definitions",
   "type": "object",
-  "required": ["id", "name", "version", "description", "capabilities"],
+  "required": ["name", "author", "desc", "startup", "config", "scripts", "variables"],
   "properties": {
-    "id": {
-      "type": "string",
-      "pattern": "^[a-z0-9-]+$"
-    },
     "name": {
       "type": "string",
       "minLength": 1
     },
-    "version": {
+    "author": {
       "type": "string",
-      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+      "format": "email"
     },
-    "description": {
-      "type": "string"
-    },
-    "image": {
-      "type": "object",
-      "properties": {
-        "repository": {
-          "type": "string"
-        },
-        "tag": {
-          "type": "string"
-        },
-        "pullPolicy": {
-          "type": "string",
-          "enum": ["Always", "IfNotPresent", "Never"]
-        }
-      },
-      "additionalProperties": true
-    },
-    "installation": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "startup": {
-      "type": "object",
-      "required": ["command"],
-      "properties": {
-        "command": {
-          "type": "string"
-        },
-        "done": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": true
-    },
-    "capabilities": {
-      "type": "object",
-      "properties": {
-        "mods": {
-          "type": "boolean"
-        },
-        "frameworks": {
-          "type": "boolean"
-        },
-        "hotReload": {
-          "type": "boolean"
-        },
-        "configFiles": {
-          "type": "boolean"
-        },
-        "resourceDiscovery": {
-          "type": "boolean"
-        },
-        "steamDiskSpace": {
-          "type": "boolean"
-        },
-        "wipe": {
-          "type": "boolean"
-        },
-        "variables": {
-          "type": "boolean"
-        }
-      },
-      "required": ["wipe"],
-      "additionalProperties": true
-    },
-    "defaults": {
-      "type": "object",
-      "additionalProperties": true
-    },
-    "environment": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
-    },
-    "variables": {
-      "type": "array",
-      "items": {
-        "type": "object"
-      }
+    "desc": {
+      "type": "string",
+      "description": "Game description"
     },
     "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of supported features (e.g., steam_disk_space)"
+    },
+    "images": {
       "type": "object",
+      "description": "Docker image mappings",
+      "patternProperties": {
+        ".*": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "startup": {
+      "type": "string",
+      "description": "Startup command template with {{VARIABLE}} placeholders"
+    },
+    "config": {
+      "type": "object",
+      "required": ["files", "startup", "logs", "stop"],
       "properties": {
-        "maintenance": {
+        "files": {
+          "type": "string"
+        },
+        "startup": {
+          "oneOf": [
+            { "type": "string" },
+            { "type": "object" }
+          ]
+        },
+        "logs": {
+          "type": "string"
+        },
+        "stop": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true
+    },
+    "scripts": {
+      "type": "object",
+      "required": ["installer"],
+      "properties": {
+        "installer": {
           "type": "object",
+          "required": ["code", "image", "entry"],
           "properties": {
-            "actions": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              }
+            "code": {
+              "type": "string",
+              "description": "Installation script code"
+            },
+            "image": {
+              "type": "string",
+              "description": "Docker image for installer container"
+            },
+            "entry": {
+              "type": "string",
+              "description": "Entrypoint command (e.g., bash)"
             }
           },
           "additionalProperties": true
@@ -119,21 +87,43 @@
       },
       "additionalProperties": true
     },
-    "paths": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "string"
-      }
-    },
-    "stop": {
-      "type": "object",
-      "properties": {
-        "command": {
-          "type": "string"
-        }
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/variable"
       },
-      "additionalProperties": true
+      "minItems": 1
     }
   },
-  "additionalProperties": true
+  "$defs": {
+    "variable": {
+      "type": "object",
+      "required": ["name", "desc", "env", "def", "rules"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "desc": {
+          "type": "string",
+          "description": "Variable description"
+        },
+        "env": {
+          "type": "string",
+          "pattern": "^[A-Z_][A-Z0-9_]*$",
+          "description": "Environment variable name"
+        },
+        "def": {
+          "description": "Default value (can be string, number, or empty string)"
+        },
+        "rules": {
+          "type": "string",
+          "description": "Validation rules (Laravel-style)"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
 }
+
