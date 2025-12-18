@@ -1,0 +1,223 @@
+# Rust Modding Frameworks Configuration
+
+# Oxide Framework Configuration
+oxide:
+  name: Oxide
+  desc: |
+    Oxide is a popular modding framework for Rust that allows server administrators
+    to extend server functionality with plugins. It provides a comprehensive API
+    for plugin development and management.
+  
+  version: "latest"
+  website: "https://umod.org"
+  
+  # Oxide kurulum dizini
+  install_path: "/mnt/server/oxide"
+  
+  # Oxide plugin dizini
+  plugins_path: "/mnt/server/oxide/plugins"
+  
+  # Oxide config dizini
+  config_path: "/mnt/server/oxide/config"
+  
+  # Oxide data dizini
+  data_path: "/mnt/server/oxide/data"
+  
+  # Oxide log dizini
+  logs_path: "/mnt/server/oxide/logs"
+  
+  # Oxide ana dosyası
+  core_file: "Oxide.Rust.dll"
+  
+  scripts:
+    installer:
+      code: |
+        #!/bin/bash
+        # Oxide Framework Installation Script
+        # Server Files: /mnt/server
+        
+        # ANSI color codes
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+        YELLOW='\033[1;33m'
+        BLUE='\033[0;34m'
+        CYAN='\033[0;36m'
+        WHITE='\033[1;37m'
+        BOLD='\033[1m'
+        NC='\033[0m' # No Color
+        
+        echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${CYAN}${BOLD}║          Oxide Framework Installation Script              ║${NC}"
+        echo -e "${CYAN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        
+        # Oxide dizinlerini oluştur
+        echo -e "${CYAN}${BOLD}[1/4]${NC} ${WHITE}Creating Oxide directories...${NC}"
+        mkdir -p /mnt/server/oxide/{plugins,config,data,logs}
+        
+        if [ $? -eq 0 ]; then
+          echo -e "${GREEN}✓ Oxide directories created${NC}"
+        else
+          echo -e "${RED}✗ Failed to create Oxide directories${NC}"
+          exit 1
+        fi
+        
+        # Oxide'i indir
+        echo -e "${CYAN}${BOLD}[2/4]${NC} ${WHITE}Downloading Oxide framework...${NC}"
+        OXIDE_URL="https://github.com/OxideMod/Oxide.Rust/releases/latest/download/Oxide.Rust-linux.zip"
+        
+        cd /tmp
+        if curl -sSL -L -o oxide.zip "${OXIDE_URL}"; then
+          echo -e "${GREEN}✓ Oxide downloaded successfully${NC}"
+        else
+          echo -e "${RED}✗ Failed to download Oxide${NC}"
+          exit 1
+        fi
+        
+        # Oxide'i çıkar
+        echo -e "${CYAN}${BOLD}[3/4]${NC} ${WHITE}Extracting Oxide framework...${NC}"
+        if unzip -q oxide.zip -d /mnt/server/ 2>/dev/null; then
+          echo -e "${GREEN}✓ Oxide extracted successfully${NC}"
+        else
+          echo -e "${RED}✗ Failed to extract Oxide${NC}"
+          exit 1
+        fi
+        
+        # İzinleri ayarla
+        echo -e "${CYAN}${BOLD}[4/4]${NC} ${WHITE}Setting permissions...${NC}"
+        chmod -R 755 /mnt/server/oxide
+        echo -e "${GREEN}✓ Permissions configured${NC}"
+        
+        echo ""
+        echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${GREEN}${BOLD}║     ✓ Oxide Framework Installation Completed!             ║${NC}"
+        echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+      image: ghcr.io/rustopic/installers:debian
+      entry: bash
+  
+  config:
+    # Oxide config dosyası
+    main_config: "oxide/config.json"
+    
+    # Oxide startup komutu
+    startup_args: ""
+    
+    # Oxide reload komutu
+    reload_command: "oxide.reload *"
+    
+    # Oxide unload komutu
+    unload_command: "oxide.unload *"
+  
+  variables: []
+
+# Carbon Framework Configuration
+carbon:
+  name: Carbon
+  desc: |
+    Carbon is a modern, high-performance modding framework for Rust that aims to be
+    a faster and more efficient alternative to Oxide. It provides better performance
+    and improved plugin compatibility while maintaining a similar API structure.
+  
+  version: "latest"
+  website: "https://codefling.com/carbon"
+  
+  # Carbon kurulum dizini
+  install_path: "/mnt/server/carbon"
+  
+  # Carbon plugin dizini
+  plugins_path: "/mnt/server/carbon/plugins"
+  
+  # Carbon config dizini
+  config_path: "/mnt/server/carbon/config"
+  
+  # Carbon data dizini
+  data_path: "/mnt/server/carbon/data"
+  
+  # Carbon log dizini
+  logs_path: "/mnt/server/carbon/logs"
+  
+  # Carbon ana dosyası
+  core_file: "Carbon.dll"
+  
+  scripts:
+    installer:
+      code: |
+        #!/bin/bash
+        # Carbon Framework Installation Script
+        # Server Files: /mnt/server
+        
+        # ANSI color codes
+        RED='\033[0;31m'
+        GREEN='\033[0;32m'
+        YELLOW='\033[1;33m'
+        BLUE='\033[0;34m'
+        CYAN='\033[0;36m'
+        WHITE='\033[1;37m'
+        BOLD='\033[1m'
+        NC='\033[0m' # No Color
+        
+        echo -e "${CYAN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${CYAN}${BOLD}║          Carbon Framework Installation Script             ║${NC}"
+        echo -e "${CYAN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+        
+        # Carbon dizinlerini oluştur
+        echo -e "${CYAN}${BOLD}[1/4]${NC} ${WHITE}Creating Carbon directories...${NC}"
+        mkdir -p /mnt/server/carbon/{plugins,config,data,logs}
+        
+        if [ $? -eq 0 ]; then
+          echo -e "${GREEN}✓ Carbon directories created${NC}"
+        else
+          echo -e "${RED}✗ Failed to create Carbon directories${NC}"
+          exit 1
+        fi
+        
+        # Carbon'i indir
+        echo -e "${CYAN}${BOLD}[2/4]${NC} ${WHITE}Downloading Carbon framework...${NC}"
+        CARBON_URL="https://github.com/CarbonCommunity/Carbon.Core/releases/latest/download/Carbon.Linux.zip"
+        
+        cd /tmp
+        if curl -sSL -L -o carbon.zip "${CARBON_URL}"; then
+          echo -e "${GREEN}✓ Carbon downloaded successfully${NC}"
+        else
+          echo -e "${RED}✗ Failed to download Carbon${NC}"
+          exit 1
+        fi
+        
+        # Carbon'i çıkar
+        echo -e "${CYAN}${BOLD}[3/4]${NC} ${WHITE}Extracting Carbon framework...${NC}"
+        if unzip -q carbon.zip -d /mnt/server/ 2>/dev/null; then
+          echo -e "${GREEN}✓ Carbon extracted successfully${NC}"
+        else
+          echo -e "${RED}✗ Failed to extract Carbon${NC}"
+          exit 1
+        fi
+        
+        # İzinleri ayarla
+        echo -e "${CYAN}${BOLD}[4/4]${NC} ${WHITE}Setting permissions...${NC}"
+        chmod -R 755 /mnt/server/carbon
+        echo -e "${GREEN}✓ Permissions configured${NC}"
+        
+        echo ""
+        echo -e "${GREEN}${BOLD}╔════════════════════════════════════════════════════════════╗${NC}"
+        echo -e "${GREEN}${BOLD}║     ✓ Carbon Framework Installation Completed!            ║${NC}"
+        echo -e "${GREEN}${BOLD}╚════════════════════════════════════════════════════════════╝${NC}"
+        echo ""
+      image: ghcr.io/rustopic/installers:debian
+      entry: bash
+  
+  config:
+    # Carbon config dosyası
+    main_config: "carbon/config.json"
+    
+    # Carbon startup komutu
+    startup_args: ""
+    
+    # Carbon reload komutu
+    reload_command: "carbon.reload *"
+    
+    # Carbon unload komutu
+    unload_command: "carbon.unload *"
+  
+  variables: []
