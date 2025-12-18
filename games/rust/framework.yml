@@ -5,13 +5,14 @@ frameworks:
     name: server.static.framework.oxide.name
     description: "server.static.framework.oxide.description"
     paths:
-      - soxide
+      - oxide
       - oxide/config
       - oxide/plugins
       - oxide/data
-    homepage: https://umod.org/
-    plugins: 
-      url: https://umod.org/plugins/search.json
+      - oxide/lang
+    homepage: https://umod.org/games/rust
+    plugins:
+      url: https://umod.org/plugins/search.json?categories[]=rust
       params:
         query:
           type: string
@@ -24,9 +25,9 @@ frameworks:
           default: downloads
           values:
             - downloads
-            - name
-            - updated_at
-            - created_at
+            - title
+            - latest_release_at
+            - published_at
             - watchers
         sortdir:
           type: string
@@ -34,31 +35,41 @@ frameworks:
           values:
             - desc
             - asc
-        filter:
+
+  - id: carbon
+    name: server.static.framework.carbon.name
+    description: "server.static.framework.carbon.description"
+    paths:
+      - carbon
+      - carbon/configs
+      - carbon/plugins
+      - carbon/extensions
+      - carbon/native
+      - carbon/tools
+      - carbon/data
+      - carbon/lang
+    homepage: https://carbonmod.gg/
+    plugins:
+      url: https://umod.org/plugins/search.json?categories[]=rust
+      params:
+        query:
           type: string
           default: ""
-        categories:
-          type: array
-          default:
-            - rust
-        author:
+        page:
+          type: integer
+          default: 1
+        sort:
           type: string
-          default: "" 
-      
-
-  - id: rust
-    name: Rust (Vanilla)
-    description: |
-      Rust sunucusunun varsayılan vanilla sürümü.
-      Framework olmadan çalışan temel Rust sunucusu.
-    paths:
-      - server
-      - server/cfg
-      - server/server
-      - server/linux64
-    homepage: https://rust.facepunch.com/
-    help: |
-      Rust vanilla sunucusu framework olmadan çalışır.
-      Sunucu yapılandırması server/cfg klasöründe bulunur.
-      Ek özellikler için Oxide veya Carbon framework'ünü kullanabilirsiniz.
-
+          default: downloads
+          values:
+            - downloads
+            - title
+            - latest_release_at
+            - published_at
+            - watchers
+        sortdir:
+          type: string
+          default: desc
+          values:
+            - desc
+            - asc
