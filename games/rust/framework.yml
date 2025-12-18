@@ -5,7 +5,7 @@ frameworks:
     name: server.static.framework.oxide.name
     description: "server.static.framework.oxide.description"
     paths:
-      - oxide
+      - soxide
       - oxide/config
       - oxide/plugins
       - oxide/data
@@ -13,14 +13,37 @@ frameworks:
     plugins: 
       url: https://umod.org/plugins/search.json
       params:
-        query: ""
-        page: 1
-        sort: downloads
-        sortdir: desc
-        filter: ""
+        query:
+          type: string
+          default: ""
+        page:
+          type: integer
+          default: 1
+        sort:
+          type: string
+          default: downloads
+          values:
+            - downloads
+            - name
+            - updated_at
+            - created_at
+            - watchers
+        sortdir:
+          type: string
+          default: desc
+          values:
+            - desc
+            - asc
+        filter:
+          type: string
+          default: ""
         categories:
-          - rust
-        author: "" 
+          type: array
+          default:
+            - rust
+        author:
+          type: string
+          default: "" 
       
 
   - id: rust
