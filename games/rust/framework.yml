@@ -2,20 +2,26 @@
 
 frameworks:
   - id: oxide
-    name: Oxide
-    description: |
-      Oxide, Rust için popüler bir modding framework'üdür. 
-      Plugin sistemi ile sunucunuza özellikler eklemenize olanak sağlar.
+    name: server.static.framework.oxide.name
+    description: "server.static.framework.oxide.description"
     paths:
       - oxide
       - oxide/config
       - oxide/plugins
       - oxide/data
     homepage: https://umod.org/
-    help: |
-      Oxide framework'ü Rust sunucuları için plugin desteği sağlar.
-      Plugin'leri oxide/plugins klasörüne ekleyebilirsiniz.
-      Yapılandırma dosyaları oxide/config klasöründe bulunur.
+    plugins: 
+      url: https://umod.org/plugins/search.json
+      params:
+        query: ""
+        page: 1
+        sort: downloads
+        sortdir: desc
+        filter: ""
+        categories:
+          - rust
+        author: "" 
+      
 
   - id: rust
     name: Rust (Vanilla)
