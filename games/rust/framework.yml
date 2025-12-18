@@ -1,0 +1,35 @@
+# Rust Framework Definitions
+
+frameworks:
+  - id: oxide
+    name: Oxide
+    description: |
+      Oxide, Rust için popüler bir modding framework'üdür. 
+      Plugin sistemi ile sunucunuza özellikler eklemenize olanak sağlar.
+    paths:
+      - oxide
+      - oxide/config
+      - oxide/plugins
+      - oxide/data
+    homepage: https://umod.org/
+    help: |
+      Oxide framework'ü Rust sunucuları için plugin desteği sağlar.
+      Plugin'leri oxide/plugins klasörüne ekleyebilirsiniz.
+      Yapılandırma dosyaları oxide/config klasöründe bulunur.
+
+  - id: rust
+    name: Rust (Vanilla)
+    description: |
+      Rust sunucusunun varsayılan vanilla sürümü.
+      Framework olmadan çalışan temel Rust sunucusu.
+    paths:
+      - server
+      - server/cfg
+      - server/server
+      - server/linux64
+    homepage: https://rust.facepunch.com/
+    help: |
+      Rust vanilla sunucusu framework olmadan çalışır.
+      Sunucu yapılandırması server/cfg klasöründe bulunur.
+      Ek özellikler için Oxide veya Carbon framework'ünü kullanabilirsiniz.
+
