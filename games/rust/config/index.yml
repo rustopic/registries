@@ -4,8 +4,8 @@
 version: 1
 
 locations:
-  serverRoot: "/home/container"
-  cfgRoot: "/home/container/server/{{IDENTITY}}"
+  serverRoot: "/"
+  cfgRoot: "server/{{IDENTITY}}"
 
 files:
   - id: server.cfg
