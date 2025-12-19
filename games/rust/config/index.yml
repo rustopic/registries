@@ -1,0 +1,38 @@
+# Rust Config Specification Index
+# This file defines the supported configuration files for Rust server
+
+version: 1
+
+locations:
+  serverRoot: "/home/container"
+  cfgRoot: "/home/container/server/{{IDENTITY}}"
+
+files:
+  - id: server.cfg
+    name: "Server Configuration"
+    description: "Main server configuration file"
+    kind: kv
+    path: "${cfgRoot}/server.cfg"
+    schemaRef: "config/files/server.cfg.yml"
+
+  - id: serverauto.cfg
+    name: "Server Auto Configuration"
+    description: "Automatic server configuration file"
+    kind: kv
+    path: "${cfgRoot}/serverauto.cfg"
+    schemaRef: "config/files/serverauto.cfg.yml"
+
+  - id: bans.cfg
+    name: "Bans Configuration"
+    description: "Server ban list"
+    kind: list
+    path: "${cfgRoot}/bans.cfg"
+    schemaRef: "config/files/bans.cfg.yml"
+
+  - id: users.cfg
+    name: "Users Configuration"
+    description: "User authorization list"
+    kind: list
+    path: "${cfgRoot}/users.cfg"
+    schemaRef: "config/files/users.cfg.yml"
+

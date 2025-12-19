@@ -1,0 +1,1394 @@
+# Rust Server Auto Configuration Schema
+# This file defines the structure for serverauto.cfg
+
+version: 1
+
+file:
+  format:
+    type: "kv"
+  lineTemplate: "{key} {value}"
+  quoting:
+    strings: "auto"
+    quoteChar: '"'
+  boolean:
+    mapping:
+      true: "True"
+      false: "False"
+
+rules:
+  allowUnknownKeys: false
+
+groups:
+  - id: boombox
+    name: "Boombox Settings"
+    description: "Boombox music player settings"
+    fields:
+      - boombox.backtracklength
+      - boombox.serverurllist
+
+  - id: ai
+    name: "AI Settings"
+    description: "Artificial intelligence and animal settings"
+    fields:
+      - ai.allowdesigning
+      - ai.think
+      - ai.move
+      - ai.tickrate
+
+  - id: creative
+    name: "Creative Mode Settings"
+    description: "Creative mode settings"
+    fields:
+      - creative.allusers
+      - creative.alwaysonenabled
+      - creative.bypassholdtoplaceduration
+      - creative.freebuild
+      - creative.freeplacement
+      - creative.freerepair
+      - creative.unlimitedio
+
+  - id: demo
+    name: "Demo/Recording Settings"
+    description: "Server demo recording settings"
+    fields:
+      - demo.delete_after_upload
+      - demo.server_demo_cleanup_interval
+      - demo.server_demo_disk_space_gb
+      - demo.recordlist
+      - demo.recordlistmode
+      - demo.server_flush_seconds
+      - demo.full_server_demo
+      - demo.upload_demos
+      - demo.upload_url
+      - demo.zip_demos
+
+  - id: global
+    name: "Global Settings"
+    description: "General server settings"
+    fields:
+      - global.maxspraysperplayer
+      - global.perf
+      - global.sprayduration
+      - global.sprayoutofauthmultiplier
+
+  - id: physics
+    name: "Physics Settings"
+    description: "Physics engine settings"
+    fields:
+      - physics.serversideragdolls
+      - physics.treecollision
+
+  - id: player
+    name: "Player Settings"
+    description: "Player behavior settings"
+    fields:
+      - player.woundforever
+
+  - id: profile
+    name: "Profile Settings"
+    description: "Profile and performance settings"
+    fields:
+      - profile.quiet
+      - profile.runtime_profiling
+      - profile.runtime_profiling_persist
+
+  - id: server_gameplay
+    name: "Server Gameplay Settings"
+    description: "Game mechanics settings"
+    fields:
+      - server.allowvineswinging
+      - server.arrowarmor
+      - server.arrowdamage
+      - server.artificialtemperaturegrowablerange
+      - server.autouploadmap
+      - server.autouploadmapimages
+      - server.bleedingarmor
+      - server.bleedingdamage
+      - server.bulletarmor
+      - server.bulletdamage
+      - server.canequipbackpacksinair
+      - server.crawlingenabled
+      - server.defaultblueprintresearchcost
+      - server.funwaterdamagethreshold
+      - server.funwaterwetnessgain
+      - server.hardcorefirearmammunitioncraftingmultiplier
+      - server.meleearmor
+      - server.meleedamage
+      - server.pvebulletdamagemultiplier
+      - server.pvp_ttk_bullet
+      - server.pvp_ttk_global
+      - server.pvp_ttk_melee
+      - server.pvpbulletdamagemultiplier
+      - server.woundingenabled
+      - server.woundedrecoverchance
+      - server.woundedmaxfoodandwaterbonus
+
+  - id: server_building
+    name: "Server Building Settings"
+    description: "Building and structure settings"
+    fields:
+      - server.ceilinglightgrowablerange
+      - server.ceilinglightheightoffset
+      - server.conveyormovefrequency
+      - server.enforcepipechecksonbuildingblockchanges
+      - server.industrialcrafterfrequency
+      - server.industrialframebudgetms
+      - server.industrialtransferstricttimelimits
+      - server.maxitemstacksmovedpertickindustrial
+      - server.sprinklereyeheightoffset
+      - server.sprinklerradius
+      - server.uselegacysprinklerloadprocess
+
+  - id: server_other
+    name: "Server Other Settings"
+    description: "Other server settings"
+    fields:
+      - server.favoritesendpoint
+      - server.farmchickenlocalavoidance
+      - server.headerimage
+      - server.hopperanimationbudgetms
+      - server.incapacitatedrecoverchance
+      - server.logoimage
+      - server.maximummapmarkers
+      - server.maximumpings
+      - server.monumentpuzzleresetwarnings
+      - server.motd
+      - server.nonplanterdeathchancepertick
+      - server.npcammolootmultiplier
+      - server.oilrig_radiation_amount_scale
+      - server.oilrig_radiation_time_scale
+      - server.optimalplanterqualitysaturation
+      - server.parachuterepacktime
+      - server.pingduration
+      - server.playerserverfall
+      - server.printreportstoconsole
+      - server.reportsserverendpoint
+      - server.reportsserverendpointkey
+      - server.respawntimeadditionbag
+      - server.respawntimeadditionbed
+      - server.rewounddelay
+      - server.savebackupcount
+      - server.server_id
+      - server.showholstereditems
+      - server.spawnvinetrees
+      - server.tags
+      - server.tutorialenabled
+      - server.watercontainersleavewaterbehind
+      - server.workbenchtaxrate1
+      - server.workbenchtaxrate2
+      - server.workbenchtaxrate3
+
+  - id: steam
+    name: "Steam Settings"
+    description: "Steam integration settings"
+    fields:
+      - steam.server_allow_steam_nicknames
+
+  - id: rcon
+    name: "RCON Settings"
+    description: "RCON remote management settings"
+    fields:
+      - rcon.enablesubscriptions
+
+  - id: analytics
+    name: "Analytics Settings"
+    description: "Analytics and reporting settings"
+    fields:
+      - analytics.analytics_header
+      - analytics.analytics_secret
+      - analytics.azure_client_id
+      - analytics.azure_client_secret
+      - analytics.azure_tenant_id
+      - analytics.analytics_bulk_container_url
+      - analytics.analytics_bulk_upload_url
+      - analytics.gameplay_analytics
+      - analytics.gameplay_rpc_analytics
+      - analytics.gameplay_tick_analytics
+      - analytics.performance_analytics
+      - analytics.small_buffer_send_limit
+
+  - id: npc_vending
+    name: "NPC Vending Machine Settings"
+    description: "NPC vending machine settings"
+    fields:
+      - npcvendingmachine.dynamicpricingenabled
+      - npcvendingmachine.maximumpricemultiplier
+      - npcvendingmachine.minimumpricemultiplier
+      - npcvendingmachine.pricedecreaseamount
+      - npcvendingmachine.priceincreaseamount
+      - npcvendingmachine.priceupdatefrequencybiweekly
+      - npcvendingmachine.priceupdatefrequencydefault
+      - npcvendingmachine.priceupdatefrequencyweekly
+      - npcvendingmachine.startingpricemultiplier
+
+  - id: parachute
+    name: "Parachute Settings"
+    description: "Parachute mechanics settings"
+    fields:
+      - parachute.bypassrepack
+      - parachute.landinganimations
+
+  - id: physics_tumbling
+    name: "Physics Tumbling Entity Settings"
+    description: "Physics tumbling entity settings"
+    fields:
+      - physicstumblingentity.angular_drag_override
+      - physicstumblingentity.drag_override
+      - physicstumblingentity.max_tumbling_force
+      - physicstumblingentity.min_tumbling_force
+      - physicstumblingentity.player_impulse_multiplier
+      - physicstumblingentity.tumbling_force_cone_angle
+      - physicstumblingentity.velocity_threshold_for_tumbling_force
+
+  - id: horse
+    name: "Horse Settings"
+    description: "Ridable horse settings"
+    fields:
+      - ridablehorse.autoavoidance
+      - ridablehorse.debug
+      - ridablehorse.groundangleupdaterate
+      - ridablehorse.throttledgroundangleupdate
+
+  - id: prefab_spawner
+    name: "Prefab Spawner Settings"
+    description: "Convar timed prefab spawner settings"
+    fields:
+      - convartimedprefabspawner.prefab_despawn_time
+      - convartimedprefabspawner.prefab_spawn_interval_variance
+      - convartimedprefabspawner.prefab_spawn_random_position_offset
+      - convartimedprefabspawner.prefab_spawn_random_rotation
+
+  - id: tutorial
+    name: "Tutorial Island Settings"
+    description: "Tutorial island settings"
+    fields:
+      - tutorialisland.enforcetrespasschecks
+      - tutorialisland.spawntutorialislandfornewplayer
+
+  - id: vendor
+    name: "Travelling Vendor Settings"
+    description: "Travelling vendor settings"
+    fields:
+      - travellingvendor.max_speed
+
+  - id: waypoint_race
+    name: "Waypoint Race Settings"
+    description: "Waypoint race settings"
+    fields:
+      - waypointrace.racetimeout
+
+fields:
+  # Boombox
+  - key: boombox.backtracklength
+    type: string
+    label: "Boombox Backtrack Length"
+    description: "Boombox backtrack length"
+    widget: text
+    group: boombox
+
+  - key: boombox.serverurllist
+    type: string
+    label: "Boombox Server URL List"
+    description: "Boombox server URL list"
+    widget: text
+    group: boombox
+
+  # AI
+  - key: ai.allowdesigning
+    type: boolean
+    label: "AI Allow Designing"
+    description: "Allow AI to design"
+    widget: checkbox
+    default: true
+    group: ai
+
+  - key: ai.think
+    type: integer
+    label: "AI Düşünme"
+    description: "If set to False (0), bears and wolves are only hostile on attack"
+    widget: number
+    validation:
+      min: 0
+      max: 1
+    default: 1
+    group: ai
+
+  - key: ai.move
+    type: boolean
+    label: "AI Hareket"
+    description: "If set to False, animals will stop moving (recommended for performance boost)"
+    widget: checkbox
+    default: true
+    group: ai
+
+  - key: ai.tickrate
+    type: integer
+    label: "AI Tickrate"
+    description: "Changes the tickrate of animals"
+    widget: number
+    validation:
+      min: 1
+    default: 5
+    group: ai
+
+  # Creative
+  - key: creative.allusers
+    type: boolean
+    label: "Creative All Users"
+    description: "Creative mode for all users"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.alwaysonenabled
+    type: boolean
+    label: "Creative Always One Enabled"
+    description: "Creative mode always one enabled"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.bypassholdtoplaceduration
+    type: boolean
+    label: "Creative Bypass Hold To Place Duration"
+    description: "Bypass hold to place duration"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.freebuild
+    type: boolean
+    label: "Creative Free Build"
+    description: "Free build mode"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.freeplacement
+    type: boolean
+    label: "Creative Free Placement"
+    description: "Free placement"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.freerepair
+    type: boolean
+    label: "Creative Free Repair"
+    description: "Free repair"
+    widget: checkbox
+    default: false
+    group: creative
+
+  - key: creative.unlimitedio
+    type: boolean
+    label: "Creative Unlimited IO"
+    description: "Unlimited input/output"
+    widget: checkbox
+    default: false
+    group: creative
+
+  # Demo
+  - key: demo.delete_after_upload
+    type: boolean
+    label: "Demo Delete After Upload"
+    description: "Delete demo after upload"
+    widget: checkbox
+    default: true
+    group: demo
+
+  - key: demo.server_demo_cleanup_interval
+    type: string
+    label: "Demo Cleanup Interval"
+    description: "Demo cleanup interval"
+    widget: text
+    group: demo
+
+  - key: demo.server_demo_disk_space_gb
+    type: string
+    label: "Demo Disk Space GB"
+    description: "Disk space for demos (GB)"
+    widget: text
+    group: demo
+
+  - key: demo.recordlist
+    type: string
+    label: "Demo Record List"
+    description: "Demo record list"
+    widget: text
+    group: demo
+
+  - key: demo.recordlistmode
+    type: string
+    label: "Demo Record List Mode"
+    description: "Demo record list mode"
+    widget: text
+    group: demo
+
+  - key: demo.server_flush_seconds
+    type: string
+    label: "Demo Server Flush Seconds"
+    description: "Demo server flush time (seconds)"
+    widget: text
+    group: demo
+
+  - key: demo.full_server_demo
+    type: boolean
+    label: "Demo Full Server Demo"
+    description: "Full server demo recording"
+    widget: checkbox
+    default: false
+    group: demo
+
+  - key: demo.upload_demos
+    type: boolean
+    label: "Demo Upload Demos"
+    description: "Upload demos"
+    widget: checkbox
+    default: true
+    group: demo
+
+  - key: demo.upload_url
+    type: string
+    label: "Demo Upload URL"
+    description: "Demo upload URL"
+    widget: text
+    group: demo
+
+  - key: demo.zip_demos
+    type: boolean
+    label: "Demo Zip Demos"
+    description: "Zip demos"
+    widget: checkbox
+    default: true
+    group: demo
+
+  # Global
+  - key: global.maxspraysperplayer
+    type: string
+    label: "Global Max Sprays Per Player"
+    description: "Maximum sprays per player"
+    widget: text
+    group: global
+
+  - key: global.perf
+    type: string
+    label: "Global Performance"
+    description: "Global performance setting"
+    widget: text
+    group: global
+
+  - key: global.sprayduration
+    type: string
+    label: "Global Spray Duration"
+    description: "Spray duration (seconds)"
+    widget: text
+    group: global
+
+  - key: global.sprayoutofauthmultiplier
+    type: string
+    label: "Global Spray Out Of Auth Multiplier"
+    description: "Spray out of auth multiplier"
+    widget: text
+    group: global
+
+  # Physics
+  - key: physics.serversideragdolls
+    type: boolean
+    label: "Physics Server Side Ragdolls"
+    description: "Server-side ragdoll physics"
+    widget: checkbox
+    default: false
+    group: physics
+
+  - key: physics.treecollision
+    type: boolean
+    label: "Physics Tree Collision"
+    description: "Tree collision physics"
+    widget: checkbox
+    default: true
+    group: physics
+
+  # Player
+  - key: player.woundforever
+    type: boolean
+    label: "Player Wound Forever"
+    description: "Player stays wounded forever"
+    widget: checkbox
+    default: false
+    group: player
+
+  # Profile
+  - key: profile.quiet
+    type: boolean
+    label: "Profile Quiet"
+    description: "Profile quiet mode"
+    widget: checkbox
+    default: false
+    group: profile
+
+  - key: profile.runtime_profiling
+    type: string
+    label: "Profile Runtime Profiling"
+    description: "Runtime profiling"
+    widget: text
+    group: profile
+
+  - key: profile.runtime_profiling_persist
+    type: boolean
+    label: "Profile Runtime Profiling Persist"
+    description: "Persist runtime profiling"
+    widget: checkbox
+    default: false
+    group: profile
+
+  # Server Gameplay
+  - key: server.allowvineswinging
+    type: boolean
+    label: "Server Allow Vine Swinging"
+    description: "Asma sallanmasına izin ver"
+    widget: checkbox
+    default: true
+    group: server_gameplay
+
+  - key: server.arrowarmor
+    type: string
+    label: "Server Arrow Armor"
+    description: "Ok hasarına karşı koruma ölçeği (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.arrowdamage
+    type: string
+    label: "Server Arrow Damage"
+    description: "Ok hasarı (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.artificialtemperaturegrowablerange
+    type: string
+    label: "Server Artificial Temperature Growable Range"
+    description: "Yapay sıcaklık yetiştirilebilir menzil"
+    widget: text
+    group: server_gameplay
+
+  - key: server.autouploadmap
+    type: boolean
+    label: "Server Auto Upload Map"
+    description: "Haritayı otomatik yükle"
+    widget: checkbox
+    default: true
+    group: server_gameplay
+
+  - key: server.autouploadmapimages
+    type: boolean
+    label: "Server Auto Upload Map Images"
+    description: "Harita görsellerini otomatik yükle"
+    widget: checkbox
+    default: true
+    group: server_gameplay
+
+  - key: server.bleedingarmor
+    type: string
+    label: "Server Bleeding Armor"
+    description: "Kanama hasarına karşı koruma ölçeği (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.bleedingdamage
+    type: string
+    label: "Server Bleeding Damage"
+    description: "Kanama hasarı (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.bulletarmor
+    type: string
+    label: "Server Bullet Armor"
+    description: "Mermi hasarına karşı koruma ölçeği (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.bulletdamage
+    type: string
+    label: "Server Bullet Damage"
+    description: "Mermi hasarı (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.canequipbackpacksinair
+    type: boolean
+    label: "Server Can Equip Backpacks In Air"
+    description: "Havada sırt çantası takılabilir"
+    widget: checkbox
+    default: false
+    group: server_gameplay
+
+  - key: server.crawlingenabled
+    type: boolean
+    label: "Server Crawling Enabled"
+    description: "Sürünme etkin"
+    widget: checkbox
+    default: true
+    group: server_gameplay
+
+  - key: server.defaultblueprintresearchcost
+    type: string
+    label: "Server Default Blueprint Research Cost"
+    description: "Varsayılan plan araştırma maliyeti"
+    widget: text
+    group: server_gameplay
+
+  - key: server.funwaterdamagethreshold
+    type: string
+    label: "Server Fun Water Damage Threshold"
+    description: "Eğlenceli su hasarı eşiği"
+    widget: text
+    group: server_gameplay
+
+  - key: server.funwaterwetnessgain
+    type: string
+    label: "Server Fun Water Wetness Gain"
+    description: "Eğlenceli su ıslaklık kazanımı"
+    widget: text
+    group: server_gameplay
+
+  - key: server.hardcorefirearmammunitioncraftingmultiplier
+    type: string
+    label: "Server Hardcore Firearm Ammunition Crafting Multiplier"
+    description: "Zorlu ateşli silah cephane üretim çarpanı"
+    widget: text
+    group: server_gameplay
+
+  - key: server.meleearmor
+    type: string
+    label: "Server Melee Armor"
+    description: "Yakın dövüş hasarına karşı koruma ölçeği (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.meleedamage
+    type: string
+    label: "Server Melee Damage"
+    description: "Yakın dövüş hasarı (yüzde) - 1 = %100, 0.5 = %50, 0 = %0"
+    widget: text
+    group: server_gameplay
+
+  - key: server.pvebulletdamagemultiplier
+    type: string
+    label: "Server PvE Bullet Damage Multiplier"
+    description: "PvE mermi hasarı çarpanı"
+    widget: text
+    group: server_gameplay
+
+  - key: server.pvp_ttk_bullet
+    type: string
+    label: "Server PvP TTK Bullet"
+    description: "PvP öldürme süresi mermi"
+    widget: text
+    group: server_gameplay
+
+  - key: server.pvp_ttk_global
+    type: string
+    label: "Server PvP TTK Global"
+    description: "PvP öldürme süresi global"
+    widget: text
+    group: server_gameplay
+
+  - key: server.pvp_ttk_melee
+    type: string
+    label: "Server PvP TTK Melee"
+    description: "PvP öldürme süresi yakın dövüş"
+    widget: text
+    group: server_gameplay
+
+  - key: server.pvpbulletdamagemultiplier
+    type: string
+    label: "Server PvP Bullet Damage Multiplier"
+    description: "PvP mermi hasarı çarpanı"
+    widget: text
+    group: server_gameplay
+
+  - key: server.woundingenabled
+    type: boolean
+    label: "Server Wounding Enabled"
+    description: "Yaralama etkin"
+    widget: checkbox
+    default: true
+    group: server_gameplay
+
+  - key: server.woundedrecoverchance
+    type: string
+    label: "Server Wounded Recover Chance"
+    description: "Yaralı iyileşme şansı"
+    widget: text
+    group: server_gameplay
+
+  - key: server.woundedmaxfoodandwaterbonus
+    type: string
+    label: "Server Wounded Max Food And Water Bonus"
+    description: "Yaralı maksimum yemek ve su bonusu"
+    widget: text
+    group: server_gameplay
+
+  # Server Building
+  - key: server.ceilinglightgrowablerange
+    type: string
+    label: "Server Ceiling Light Growable Range"
+    description: "Tavan ışığı yetiştirilebilir menzil"
+    widget: text
+    group: server_building
+
+  - key: server.ceilinglightheightoffset
+    type: string
+    label: "Server Ceiling Light Height Offset"
+    description: "Tavan ışığı yükseklik ofseti"
+    widget: text
+    group: server_building
+
+  - key: server.conveyormovefrequency
+    type: string
+    label: "Server Conveyor Move Frequency"
+    description: "Konveyör hareket frekansı"
+    widget: text
+    group: server_building
+
+  - key: server.enforcepipechecksonbuildingblockchanges
+    type: boolean
+    label: "Server Enforce Pipe Checks On Building Block Changes"
+    description: "Yapı bloğu değişikliklerinde boru kontrollerini zorunlu kıl"
+    widget: checkbox
+    default: true
+    group: server_building
+
+  - key: server.industrialcrafterfrequency
+    type: string
+    label: "Server Industrial Crafter Frequency"
+    description: "Endüstriyel üretici frekansı"
+    widget: text
+    group: server_building
+
+  - key: server.industrialframebudgetms
+    type: string
+    label: "Server Industrial Frame Budget MS"
+    description: "Endüstriyel frame bütçesi (milisaniye)"
+    widget: text
+    group: server_building
+
+  - key: server.industrialtransferstricttimelimits
+    type: boolean
+    label: "Server Industrial Transfer Strict Time Limits"
+    description: "Endüstriyel transfer katı zaman limitleri"
+    widget: checkbox
+    default: true
+    group: server_building
+
+  - key: server.maxitemstacksmovedpertickindustrial
+    type: string
+    label: "Server Max Item Stacks Moved Per Tick Industrial"
+    description: "Tick başına taşınan maksimum eşya yığını (endüstriyel)"
+    widget: text
+    group: server_building
+
+  - key: server.sprinklereyeheightoffset
+    type: string
+    label: "Server Sprinkler Eye Height Offset"
+    description: "Fıskiye göz yüksekliği ofseti"
+    widget: text
+    group: server_building
+
+  - key: server.sprinklerradius
+    type: string
+    label: "Server Sprinkler Radius"
+    description: "Fıskiye yarıçapı"
+    widget: text
+    group: server_building
+
+  - key: server.uselegacysprinklerloadprocess
+    type: boolean
+    label: "Server Use Legacy Sprinkler Load Process"
+    description: "Eski fıskiye yükleme sürecini kullan"
+    widget: checkbox
+    default: false
+    group: server_building
+
+  # Server Other
+  - key: server.favoritesendpoint
+    type: string
+    label: "Server Favorites Endpoint"
+    description: "Favoriler endpoint'i"
+    widget: text
+    group: server_other
+
+  - key: server.farmchickenlocalavoidance
+    type: boolean
+    label: "Server Farm Chicken Local Avoidance"
+    description: "Çiftlik tavuğu yerel kaçınma"
+    widget: checkbox
+    default: true
+    group: server_other
+
+  - key: server.headerimage
+    type: string
+    label: "Server Header Image"
+    description: "Sunucu başlık görseli - görsel 500x256 olmalı"
+    widget: text
+    group: server_other
+
+  - key: server.hopperanimationbudgetms
+    type: string
+    label: "Server Hopper Animation Budget MS"
+    description: "Hazne animasyon bütçesi (milisaniye)"
+    widget: text
+    group: server_other
+
+  - key: server.incapacitatedrecoverchance
+    type: string
+    label: "Server Incapacitated Recover Chance"
+    description: "Güçsüz iyileşme şansı"
+    widget: text
+    group: server_other
+
+  - key: server.logoimage
+    type: string
+    label: "Server Logo Image"
+    description: "Sunucu logosu görseli - Sunucu tarayıcısında ve rust+ uygulamasında gösterilir"
+    widget: text
+    group: server_other
+
+  - key: server.maximummapmarkers
+    type: string
+    label: "Server Maximum Map Markers"
+    description: "Maksimum harita işaretçisi sayısı"
+    widget: text
+    group: server_other
+
+  - key: server.maximumpings
+    type: string
+    label: "Server Maximum Pings"
+    description: "Maksimum ping sayısı"
+    widget: text
+    group: server_other
+
+  - key: server.monumentpuzzleresetwarnings
+    type: boolean
+    label: "Server Monument Puzzle Reset Warnings"
+    description: "Anıt bulmaca sıfırlama uyarıları"
+    widget: checkbox
+    default: true
+    group: server_other
+
+  - key: server.motd
+    type: string
+    label: "Server MOTD"
+    description: "Sunucu mesajı (Message of the Day)"
+    widget: text
+    group: server_other
+
+  - key: server.nonplanterdeathchancepertick
+    type: string
+    label: "Server Non Planter Death Chance Per Tick"
+    description: "Tick başına ekici olmayan ölüm şansı"
+    widget: text
+    group: server_other
+
+  - key: server.npcammolootmultiplier
+    type: string
+    label: "Server NPC Ammo Loot Multiplier"
+    description: "NPC cephane ganimet çarpanı"
+    widget: text
+    group: server_other
+
+  - key: server.oilrig_radiation_amount_scale
+    type: string
+    label: "Server Oilrig Radiation Amount Scale"
+    description: "Petrol platformu radyasyon miktarı ölçeği"
+    widget: text
+    group: server_other
+
+  - key: server.oilrig_radiation_time_scale
+    type: string
+    label: "Server Oilrig Radiation Time Scale"
+    description: "Petrol platformu radyasyon zamanı ölçeği"
+    widget: text
+    group: server_other
+
+  - key: server.optimalplanterqualitysaturation
+    type: string
+    label: "Server Optimal Planter Quality Saturation"
+    description: "Optimal ekici kalite doygunluğu"
+    widget: text
+    group: server_other
+
+  - key: server.parachuterepacktime
+    type: string
+    label: "Server Parachute Repack Time"
+    description: "Paraşüt yeniden paketleme süresi"
+    widget: text
+    group: server_other
+
+  - key: server.pingduration
+    type: string
+    label: "Server Ping Duration"
+    description: "Ping süresi"
+    widget: text
+    group: server_other
+
+  - key: server.playerserverfall
+    type: boolean
+    label: "Server Player Server Fall"
+    description: "Oyuncu sunucu düşüşü"
+    widget: checkbox
+    default: true
+    group: server_other
+
+  - key: server.printreportstoconsole
+    type: boolean
+    label: "Server Print Reports To Console"
+    description: "Raporları konsola yazdır"
+    widget: checkbox
+    default: false
+    group: server_other
+
+  - key: server.reportsserverendpoint
+    type: string
+    label: "Server Reports Server Endpoint"
+    description: "Raporlar sunucu endpoint'i"
+    widget: text
+    group: server_other
+
+  - key: server.reportsserverendpointkey
+    type: string
+    label: "Server Reports Server Endpoint Key"
+    description: "Raporlar sunucu endpoint anahtarı"
+    widget: text
+    group: server_other
+
+  - key: server.respawntimeadditionbag
+    type: string
+    label: "Server Respawn Time Addition Bag"
+    description: "Yeniden doğma süresi ekleme (çanta)"
+    widget: text
+    group: server_other
+
+  - key: server.respawntimeadditionbed
+    type: string
+    label: "Server Respawn Time Addition Bed"
+    description: "Yeniden doğma süresi ekleme (yatak)"
+    widget: text
+    group: server_other
+
+  - key: server.rewounddelay
+    type: string
+    label: "Server Rewound Delay"
+    description: "Geri sarma gecikmesi"
+    widget: text
+    group: server_other
+
+  - key: server.savebackupcount
+    type: string
+    label: "Server Save Backup Count"
+    description: "Kayıt yedek sayısı"
+    widget: text
+    group: server_other
+
+  - key: server.server_id
+    type: string
+    label: "Server Server ID"
+    description: "Sunucu kimliği"
+    widget: text
+    group: server_other
+
+  - key: server.showholstereditems
+    type: boolean
+    label: "Server Show Holstered Items"
+    description: "Kılıftaki eşyaları göster"
+    widget: checkbox
+    default: true
+    group: server_other
+
+  - key: server.spawnvinetrees
+    type: boolean
+    label: "Server Spawn Vine Trees"
+    description: "Asma ağaçları oluştur"
+    widget: checkbox
+    default: true
+    group: server_other
+
+  - key: server.tags
+    type: string
+    label: "Server Tags"
+    description: "Sunucu etiketleri"
+    widget: text
+    group: server_other
+
+  - key: server.tutorialenabled
+    type: boolean
+    label: "Server Tutorial Enabled"
+    description: "Eğitim etkin"
+    widget: checkbox
+    default: false
+    group: server_other
+
+  - key: server.watercontainersleavewaterbehind
+    type: boolean
+    label: "Server Water Containers Leave Water Behind"
+    description: "Su kapları su bırakır"
+    widget: checkbox
+    default: false
+    group: server_other
+
+  - key: server.workbenchtaxrate1
+    type: string
+    label: "Server Workbench Tax Rate 1"
+    description: "İş tezgahı vergi oranı 1"
+    widget: text
+    group: server_other
+
+  - key: server.workbenchtaxrate2
+    type: string
+    label: "Server Workbench Tax Rate 2"
+    description: "İş tezgahı vergi oranı 2"
+    widget: text
+    group: server_other
+
+  - key: server.workbenchtaxrate3
+    type: string
+    label: "Server Workbench Tax Rate 3"
+    description: "İş tezgahı vergi oranı 3"
+    widget: text
+    group: server_other
+
+  # Steam
+  - key: steam.server_allow_steam_nicknames
+    type: boolean
+    label: "Steam Server Allow Steam Nicknames"
+    description: "Steam takma adlarına izin ver"
+    widget: checkbox
+    default: true
+    group: steam
+
+  # RCON
+  - key: rcon.enablesubscriptions
+    type: boolean
+    label: "RCON Enable Subscriptions"
+    description: "RCON abonelikleri etkinleştir"
+    widget: checkbox
+    default: false
+    group: rcon
+
+  # Analytics
+  - key: analytics.analytics_header
+    type: string
+    label: "Analytics Analytics Header"
+    description: "Analitik başlık"
+    widget: text
+    group: analytics
+
+  - key: analytics.analytics_secret
+    type: string
+    label: "Analytics Analytics Secret"
+    description: "Analitik gizli anahtar"
+    widget: text
+    group: analytics
+
+  - key: analytics.azure_client_id
+    type: string
+    label: "Analytics Azure Client ID"
+    description: "Azure istemci kimliği"
+    widget: text
+    group: analytics
+
+  - key: analytics.azure_client_secret
+    type: string
+    label: "Analytics Azure Client Secret"
+    description: "Azure istemci gizli anahtarı"
+    widget: text
+    group: analytics
+
+  - key: analytics.azure_tenant_id
+    type: string
+    label: "Analytics Azure Tenant ID"
+    description: "Azure kiracı kimliği"
+    widget: text
+    group: analytics
+
+  - key: analytics.analytics_bulk_container_url
+    type: string
+    label: "Analytics Analytics Bulk Container URL"
+    description: "Analitik toplu konteyner URL'i"
+    widget: text
+    group: analytics
+
+  - key: analytics.analytics_bulk_upload_url
+    type: string
+    label: "Analytics Analytics Bulk Upload URL"
+    description: "Analitik toplu yükleme URL'i"
+    widget: text
+    group: analytics
+
+  - key: analytics.gameplay_analytics
+    type: boolean
+    label: "Analytics Gameplay Analytics"
+    description: "Oynanış analitiği"
+    widget: checkbox
+    default: false
+    group: analytics
+
+  - key: analytics.gameplay_rpc_analytics
+    type: boolean
+    label: "Analytics Gameplay RPC Analytics"
+    description: "Oynanış RPC analitiği"
+    widget: checkbox
+    default: false
+    group: analytics
+
+  - key: analytics.gameplay_tick_analytics
+    type: boolean
+    label: "Analytics Gameplay Tick Analytics"
+    description: "Oynanış tick analitiği"
+    widget: checkbox
+    default: false
+    group: analytics
+
+  - key: analytics.performance_analytics
+    type: boolean
+    label: "Analytics Performance Analytics"
+    description: "Performans analitiği"
+    widget: checkbox
+    default: true
+    group: analytics
+
+  - key: analytics.small_buffer_send_limit
+    type: string
+    label: "Analytics Small Buffer Send Limit"
+    description: "Küçük tampon gönderme limiti"
+    widget: text
+    group: analytics
+
+  # NPC Vending Machine
+  - key: npcvendingmachine.dynamicpricingenabled
+    type: boolean
+    label: "NPC Vending Machine Dynamic Pricing Enabled"
+    description: "Dinamik fiyatlandırma etkin"
+    widget: checkbox
+    default: true
+    group: npc_vending
+
+  - key: npcvendingmachine.maximumpricemultiplier
+    type: string
+    label: "NPC Vending Machine Maximum Price Multiplier"
+    description: "Maksimum fiyat çarpanı"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.minimumpricemultiplier
+    type: string
+    label: "NPC Vending Machine Minimum Price Multiplier"
+    description: "Minimum fiyat çarpanı"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.pricedecreaseamount
+    type: string
+    label: "NPC Vending Machine Price Decrease Amount"
+    description: "Fiyat düşüş miktarı"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.priceincreaseamount
+    type: string
+    label: "NPC Vending Machine Price Increase Amount"
+    description: "Fiyat artış miktarı"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.priceupdatefrequencybiweekly
+    type: string
+    label: "NPC Vending Machine Price Update Frequency Biweekly"
+    description: "Fiyat güncelleme frekansı (iki haftada bir)"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.priceupdatefrequencydefault
+    type: string
+    label: "NPC Vending Machine Price Update Frequency Default"
+    description: "Fiyat güncelleme frekansı (varsayılan)"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.priceupdatefrequencyweekly
+    type: string
+    label: "NPC Vending Machine Price Update Frequency Weekly"
+    description: "Fiyat güncelleme frekansı (haftalık)"
+    widget: text
+    group: npc_vending
+
+  - key: npcvendingmachine.startingpricemultiplier
+    type: string
+    label: "NPC Vending Machine Starting Price Multiplier"
+    description: "Başlangıç fiyat çarpanı"
+    widget: text
+    group: npc_vending
+
+  # Parachute
+  - key: parachute.bypassrepack
+    type: boolean
+    label: "Parachute Bypass Repack"
+    description: "Yeniden paketlemeyi atla"
+    widget: checkbox
+    default: false
+    group: parachute
+
+  - key: parachute.landinganimations
+    type: boolean
+    label: "Parachute Landing Animations"
+    description: "İniş animasyonları"
+    widget: checkbox
+    default: false
+    group: parachute
+
+  # Physics Tumbling Entity
+  - key: physicstumblingentity.angular_drag_override
+    type: string
+    label: "Physics Tumbling Entity Angular Drag Override"
+    description: "Açısal sürükleme geçersiz kılma"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.drag_override
+    type: string
+    label: "Physics Tumbling Entity Drag Override"
+    description: "Sürükleme geçersiz kılma"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.max_tumbling_force
+    type: string
+    label: "Physics Tumbling Entity Max Tumbling Force"
+    description: "Maksimum yuvarlanma kuvveti"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.min_tumbling_force
+    type: string
+    label: "Physics Tumbling Entity Min Tumbling Force"
+    description: "Minimum yuvarlanma kuvveti"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.player_impulse_multiplier
+    type: string
+    label: "Physics Tumbling Entity Player Impulse Multiplier"
+    description: "Oyuncu dürtü çarpanı"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.tumbling_force_cone_angle
+    type: string
+    label: "Physics Tumbling Entity Tumbling Force Cone Angle"
+    description: "Yuvarlanma kuvveti koni açısı"
+    widget: text
+    group: physics_tumbling
+
+  - key: physicstumblingentity.velocity_threshold_for_tumbling_force
+    type: string
+    label: "Physics Tumbling Entity Velocity Threshold For Tumbling Force"
+    description: "Yuvarlanma kuvveti için hız eşiği"
+    widget: text
+    group: physics_tumbling
+
+  # Horse
+  - key: ridablehorse.autoavoidance
+    type: boolean
+    label: "Ridable Horse Auto Avoidance"
+    description: "Otomatik kaçınma"
+    widget: checkbox
+    default: true
+    group: horse
+
+  - key: ridablehorse.debug
+    type: boolean
+    label: "Ridable Horse Debug"
+    description: "Hata ayıklama modu"
+    widget: checkbox
+    default: false
+    group: horse
+
+  - key: ridablehorse.groundangleupdaterate
+    type: string
+    label: "Ridable Horse Ground Angle Update Rate"
+    description: "Zemin açısı güncelleme oranı"
+    widget: text
+    group: horse
+
+  - key: ridablehorse.throttledgroundangleupdate
+    type: boolean
+    label: "Ridable Horse Throttled Ground Angle Update"
+    description: "Kısıtlanmış zemin açısı güncelleme"
+    widget: checkbox
+    default: true
+    group: horse
+
+  # Prefab Spawner
+  - key: convartimedprefabspawner.prefab_despawn_time
+    type: string
+    label: "Convar Timed Prefab Spawner Prefab Despawn Time"
+    description: "Prefab kaybolma süresi"
+    widget: text
+    group: prefab_spawner
+
+  - key: convartimedprefabspawner.prefab_spawn_interval_variance
+    type: string
+    label: "Convar Timed Prefab Spawner Prefab Spawn Interval Variance"
+    description: "Prefab oluşturma aralığı varyansı"
+    widget: text
+    group: prefab_spawner
+
+  - key: convartimedprefabspawner.prefab_spawn_random_position_offset
+    type: string
+    label: "Convar Timed Prefab Spawner Prefab Spawn Random Position Offset"
+    description: "Prefab oluşturma rastgele konum ofseti"
+    widget: text
+    group: prefab_spawner
+
+  - key: convartimedprefabspawner.prefab_spawn_random_rotation
+    type: boolean
+    label: "Convar Timed Prefab Spawner Prefab Spawn Random Rotation"
+    description: "Prefab oluşturma rastgele rotasyon"
+    widget: checkbox
+    default: true
+    group: prefab_spawner
+
+  # Tutorial
+  - key: tutorialisland.enforcetrespasschecks
+    type: boolean
+    label: "Tutorial Island Enforce Trespass Checks"
+    description: "İzinsiz giriş kontrollerini zorunlu kıl"
+    widget: checkbox
+    default: true
+    group: tutorial
+
+  - key: tutorialisland.spawntutorialislandfornewplayer
+    type: boolean
+    label: "Tutorial Island Spawn Tutorial Island For New Player"
+    description: "Yeni oyuncu için eğitim adası oluştur"
+    widget: checkbox
+    default: true
+    group: tutorial
+
+  # Vendor
+  - key: travellingvendor.max_speed
+    type: string
+    label: "Travelling Vendor Max Speed"
+    description: "Seyyar satıcı maksimum hız"
+    widget: text
+    group: vendor
+
+  # Waypoint Race
+  - key: waypointrace.racetimeout
+    type: string
+    label: "Waypoint Race Race Timeout"
+    description: "Waypoint yarış zaman aşımı"
+    widget: text
+    group: waypoint_race

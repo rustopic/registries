@@ -1,0 +1,177 @@
+# Rust Framework Definitions
+# This file defines the supported modding frameworks and plugin management systems for Rust
+
+version: 1
+
+frameworks:
+  - id: oxide
+    name: Oxide
+    description: |
+      Oxide is the most popular and widely used modding framework for Rust.
+      It uses the uMod.org catalog for plugin management.
+    paths:
+      - oxide
+      - oxide/config
+      - oxide/plugins
+      - oxide/data
+      - oxide/lang
+    homepage: https://umod.org/games/rust
+    pluginDeployment:
+      installDir: "oxide/plugins"
+      allowedExtensions:
+        - ".cs"
+      restartRequired: true
+    plugins:
+      provider: "http-json"
+      endpoint: "https://umod.org/plugins/search.json"
+      request:
+        method: "GET"
+        params:
+          query:
+            type: "string"
+            default: ""
+            description: "Search query"
+          page:
+            type: "integer"
+            default: 1
+            min: 1
+            description: "Page number"
+          sort:
+            type: "string"
+            default: "downloads"
+            allowedValues:
+              - "downloads"
+              - "title"
+              - "latest_release_at"
+              - "published_at"
+              - "watchers"
+            description: "Sort criteria"
+          sortdir:
+            type: "string"
+            default: "desc"
+            allowedValues:
+              - "desc"
+              - "asc"
+            description: "Sort direction"
+          filter:
+            type: "object"
+            default: {}
+            description: "Additional filtering parameters"
+      response:
+        items:
+          mode: "root-array-or-path"
+          path: "$.data"
+        itemSchema:
+          required:
+            - slug
+            - name
+            - title
+            - download_url
+            - url
+          properties:
+            slug:
+              type: "string"
+            name:
+              type: "string"
+            title:
+              type: "string"
+            download_url:
+              type: "string"
+              format: "uri"
+            url:
+              type: "string"
+              format: "uri"
+            description:
+              type: "string"
+            author:
+              type: "string"
+            latest_release_version:
+              type: "string"
+            downloads:
+              type: "integer"
+            watchers:
+              type: "integer"
+            icon_url:
+              type: "string"
+              format: "uri"
+            updated_at_atom:
+              type: "string"
+              format: "date-time"
+            created_at_atom:
+              type: "string"
+              format: "date-time"
+            tags_all:
+              type: "string"
+        normalize:
+          id: "$.slug"
+          name: "$.title"
+          internalName: "$.name"
+          description: "$.description"
+          author: "$.author"
+          version: "$.latest_release_version"
+          downloads: "$.downloads"
+          watchers: "$.watchers"
+          downloadUrl: "$.download_url"
+          homepage: "$.url"
+          iconUrl: "$.icon_url"
+          updatedAt: "$.updated_at_atom"
+          createdAt: "$.created_at_atom"
+          tags: "$.tags_all | split(',')"
+      ui:
+        list:
+          titleField: "name"
+          subtitleField: "author"
+          descriptionField: "description"
+          iconField: "iconUrl"
+          columns:
+            - field: "watchers"
+              type: "number"
+              label: "Watchers"
+            - field: "downloads"
+              type: "number"
+              label: "Downloads"
+            - field: "version"
+              type: "text"
+              label: "Version"
+            - field: "updatedAt"
+              type: "date"
+              label: "Updated"
+        actions:
+          primary:
+            label: "Install"
+            action: "install"
+            usesField: "downloadUrl"
+
+  - id: carbon
+    name: Carbon
+    description: |
+      Carbon is a modern and performance-focused modding framework for Rust.
+      It supports Oxide-compatible plugins.
+    paths:
+      - carbon
+      - carbon/configs
+      - carbon/plugins
+      - carbon/extensions
+      - carbon/native
+      - carbon/tools
+      - carbon/data
+      - carbon/lang
+    homepage: https://carbonmod.gg/
+    pluginDeployment:
+      installDir: "carbon/plugins"
+      allowedExtensions:
+        - ".cs"
+        - ".dll"
+      restartRequired: true
+    # Plugin catalog for Carbon is not currently defined
+    # Place reserved for future plugin catalog addition
+
+  - id: vanilla
+    name: Vanilla
+    description: |
+      Vanilla Rust server runs without any modding framework.
+      No plugin support.
+    paths: []
+    # No plugin deployment for Vanilla
+    pluginDeployment: null
+

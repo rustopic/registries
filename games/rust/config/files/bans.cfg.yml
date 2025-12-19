@@ -1,0 +1,31 @@
+# Rust Bans Configuration Schema
+# This file defines the structure for bans.cfg
+
+version: 1
+
+file:
+  format:
+    type: "list"
+  lineTemplate: "{steamId} {reason}"
+
+rules:
+  allowUnknownKeys: false
+
+lineSchema:
+  type: object
+  properties:
+    steamId:
+      type: string
+      pattern: "^[0-9]{17}$"
+      description: "Steam ID (17 digits)"
+      required: true
+    reason:
+      type: string
+      description: "Ban reason (optional)"
+      required: false
+  required:
+    - steamId
+
+render:
+  template: "{steamId} {reason}"
+

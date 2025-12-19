@@ -1,0 +1,39 @@
+# Rust Users Configuration Schema
+# This file defines the structure for users.cfg
+
+version: 1
+
+file:
+  format:
+    type: "list"
+  lineTemplate: "{steamId} {role} {name}"
+
+rules:
+  allowUnknownKeys: false
+
+lineSchema:
+  type: object
+  properties:
+    steamId:
+      type: string
+      pattern: "^[0-9]{17}$"
+      description: "Steam ID (17 digits)"
+      required: true
+    name:
+      type: string
+      description: "User name (optional)"
+      required: false
+    role:
+      type: enum
+      description: "User role"
+      options:
+        - owner
+        - moderator
+        - player
+      required: false
+  required:
+    - steamId
+
+render:
+  template: "{steamId} {role} {name}"
+

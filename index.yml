@@ -2,7 +2,7 @@
 # This file lists all available games in the registry
 # specVersion must match manifest.yml
 
-specVersion: "1.0"
+specVersion: "1"
 
 games:
   - id: rust

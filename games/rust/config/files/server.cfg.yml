@@ -1,0 +1,379 @@
+# Rust Server Configuration Schema
+# This file defines the structure and allowed fields for server.cfg
+
+version: 1
+
+file:
+  format:
+    type: "kv"
+  lineTemplate: "{key} {value}"
+  quoting:
+    strings: "auto"
+    quoteChar: '"'
+  boolean:
+    mapping:
+      true: "true"
+      false: "false"
+
+rules:
+  allowUnknownKeys: false
+
+groups:
+  - id: general
+    name: "General Settings"
+    description: "General server settings"
+    fields:
+      - server.hostname
+      - server.description
+      - server.url
+      - server.headerimage
+      - server.logoimage
+      - server.maxplayers
+      - server.gamemode
+      - server.tags
+      - server.globalchat
+
+  - id: world
+    name: "World Settings"
+    description: "Map and world configuration"
+    fields:
+      - server.level
+      - server.seed
+      - server.worldsize
+      - server.saveinterval
+
+  - id: chat
+    name: "Chat Settings"
+    description: "Chat and logging settings"
+    fields:
+      - chat.enabled
+      - chat.serverlog
+
+  - id: security
+    name: "Security Settings"
+    description: "RCON and security settings"
+    fields:
+      - rcon.password
+      - rcon.web
+
+  - id: performance
+    name: "Performance Settings"
+    description: "Server performance settings"
+    fields:
+      - fps.limit
+      - server.tickrate
+      - server.idlekick
+      - batching.colliders
+      - ai.think
+      - ai.tickrate
+      - aimanager.nav_disable
+      - nav_wait
+      - eventschedulewipeoffset.event_hours_before_wipe
+
+fields:
+  - key: server.hostname
+    type: string
+    label: "Server Name"
+    description: "The name of your server in the public server list"
+    widget: text
+    validation:
+      maxLen: 60
+    group: general
+
+  - key: server.description
+    type: string
+    label: "Server Description"
+    description: "Server description text"
+    widget: textarea
+    group: general
+
+  - key: server.url
+    type: string
+    label: "Server URL"
+    description: "Server website URL"
+    widget: text
+    validation:
+      pattern: "^https?://.*"
+    group: general
+
+  - key: server.headerimage
+    type: string
+    label: "Header Image"
+    description: "Header image URL shown in server list (must be 500x256)"
+    widget: text
+    group: general
+
+  - key: server.logoimage
+    type: string
+    label: "Logo Image"
+    description: "Server logo image URL (shown in server browser and Rust+ app)"
+    widget: text
+    group: general
+
+  - key: server.maxplayers
+    type: integer
+    label: "Max Players"
+    description: "Maximum number of players allowed on the server at once"
+    widget: number
+    validation:
+      min: 1
+      max: 500
+    group: general
+
+  - key: server.level
+    type: enum
+    label: "Map Type"
+    description: "The map type to use"
+    widget: dropdown
+    options:
+      - "Procedural Map"
+      - "Barren"
+      - "Hapis"
+      - "Savas"
+    default: "Procedural Map"
+    group: world
+
+  - key: server.seed
+    type: integer
+    label: "Map Seed"
+    description: "Seed value for procedural map generation"
+    widget: number
+    validation:
+      min: 0
+      max: 2147483647
+    group: world
+
+  - key: server.worldsize
+    type: integer
+    label: "World Size"
+    description: "Map size in meters (3000 equals 9km²)"
+    widget: number
+    validation:
+      min: 1000
+      max: 6000
+      step: 50
+    group: world
+
+  - key: server.saveinterval
+    type: integer
+    label: "Save Interval"
+    description: "Interval between server saves in seconds"
+    widget: number
+    validation:
+      min: 60
+      max: 3600
+    group: world
+
+  - key: rcon.password
+    type: secret
+    label: "RCON Password"
+    description: "RCON access password"
+    widget: password
+    validation:
+      minLen: 1
+      maxLen: 64
+    group: security
+
+  - key: rcon.web
+    type: boolean
+    label: "RCON Web Interface"
+    description: "Enable RCON web interface"
+    widget: checkbox
+    default: true
+    group: security
+
+  - key: server.gamemode
+    type: enum
+    label: "Game Mode"
+    description: |
+      Server game mode.
+      - vanilla: Default Rust gameplay
+      - survival: Same as Vanilla, just a different label (NOTE: You must set an empty string "" for this to show)
+      - softcore: Vanilla gameplay but with some changes to make the game easier
+      - hardcore: Vanilla gameplay but with lots of features disabled or limited, providing a harder experience
+      - weapontest: For test purposes. Made for testing weapon changes
+      - primitive: Restricted items game mode focusing on primitive era
+    widget: dropdown
+    options:
+      - "vanilla"
+      - "survival"
+      - "softcore"
+      - "hardcore"
+      - "weapontest"
+      - "primitive"
+    default: "vanilla"
+    group: general
+
+  - key: server.tags
+    type: string
+    label: "Server Tags"
+    description: |
+      Server tags for categorization and filtering (comma-separated).
+      Tags are grouped and only one tag per group can be selected:
+      
+      Wipe Interval (select one): monthly, biweekly, weekly
+      Difficulty (select one): vanilla, softcore, hardcore
+      PvE: pve (automatically set when PvE is enabled)
+      Server Type (select one): roleplay, creative, minigame, training, battlefield, broyale, builds
+      Region (select one): NA, SA, EU, WA, EA, OC, AF
+      
+      Example: "weekly,vanilla,EU"
+    widget: tags
+    tagGroups:
+      - name: "Wipe Interval"
+        description: "Server wipe interval (only one can be selected)"
+        tags:
+          - "monthly"
+          - "biweekly"
+          - "weekly"
+        allowMultiple: false
+      - name: "Difficulty"
+        description: "Server difficulty (only one can be selected)"
+        tags:
+          - "vanilla"
+          - "softcore"
+          - "hardcore"
+        allowMultiple: false
+      - name: "PvE"
+        description: "PvE tag (automatically set when PvE is enabled)"
+        tags:
+          - "pve"
+        allowMultiple: false
+      - name: "Server Type"
+        description: "Server type (only one can be selected)"
+        tags:
+          - "roleplay"
+          - "creative"
+          - "minigame"
+          - "training"
+          - "battlefield"
+          - "broyale"
+          - "builds"
+        allowMultiple: false
+      - name: "Region"
+        description: "Server region (only one can be selected)"
+        tags:
+          - "NA"
+          - "SA"
+          - "EU"
+          - "WA"
+          - "EA"
+          - "OC"
+          - "AF"
+        allowMultiple: false
+    group: general
+
+  - key: server.globalchat
+    type: boolean
+    label: "Global Chat"
+    description: "If set to false, only people within voice range can read each other's messages"
+    widget: checkbox
+    default: true
+    group: general
+
+  - key: chat.enabled
+    type: boolean
+    label: "Enable Chat"
+    description: "Enable or disable chat displaying"
+    widget: checkbox
+    default: true
+    group: chat
+
+  - key: chat.serverlog
+    type: boolean
+    label: "Chat Server Log"
+    description: "Enable or disable chat logging"
+    widget: checkbox
+    default: true
+    group: chat
+
+  - key: fps.limit
+    type: integer
+    label: "FPS Limit"
+    description: "The maximum number of frames to render per second"
+    widget: number
+    validation:
+      min: 10
+      max: 1000
+    default: 30
+    group: performance
+
+  - key: server.tickrate
+    type: integer
+    label: "Server Tickrate"
+    description: "Changes the server tickrate. Going higher than 30 is not recommended"
+    widget: number
+    validation:
+      min: 10
+      max: 30
+    default: 30
+    group: performance
+
+  - key: server.idlekick
+    type: integer
+    label: "Idle Kick Time"
+    description: "Number of minutes until idle players are kicked (0 = disabled)"
+    widget: number
+    validation:
+      min: 0
+    default: 30
+    group: performance
+
+  - key: batching.colliders
+    type: integer
+    label: "Collider Batching"
+    description: "*EXPERIMENTAL* Rust batches colliders to get around the maximum collider limit. To improve server performance you can unbatch (batching.colliders 0) colliders until they reach 250k"
+    widget: number
+    validation:
+      min: 0
+      max: 1
+    default: 1
+    group: performance
+
+  - key: ai.think
+    type: integer
+    label: "AI Think"
+    description: "If set to False (0), bears and wolves are only hostile on attack"
+    widget: number
+    validation:
+      min: 0
+      max: 1
+    default: 1
+    group: performance
+
+  - key: ai.tickrate
+    type: integer
+    label: "AI Tickrate"
+    description: "Changes the tickrate of animals"
+    widget: number
+    validation:
+      min: 1
+    default: 5
+    group: performance
+
+  - key: aimanager.nav_disable
+    type: boolean
+    label: "AI Navigation Disabled"
+    description: "Disables AI navigation"
+    widget: checkbox
+    default: false
+    group: performance
+
+  - key: nav_wait
+    type: boolean
+    label: "Navigation Wait"
+    description: "Enables navigation wait mode"
+    widget: checkbox
+    default: true
+    group: performance
+
+  - key: eventschedulewipeoffset.event_hours_before_wipe
+    type: integer
+    label: "Hours Before Wipe"
+    description: "How many hours before wipe the event will start"
+    widget: number
+    validation:
+      min: 0
+    default: 0
+    group: performance
+
